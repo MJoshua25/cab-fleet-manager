@@ -50,6 +50,8 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 
 	# My apps
+	'tenant',
+	'core',
 
 	# Packages
 	'django_filters',
