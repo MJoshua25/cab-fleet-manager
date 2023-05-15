@@ -71,7 +71,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'projet.urls'
-MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.SessionStorage"
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 TEMPLATES = [
 	{
