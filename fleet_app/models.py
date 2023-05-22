@@ -44,3 +44,18 @@ class Driver(TenantAwareModel):
 
 	def __str__(self):
 		return f"{self.first_name} {self.last_name} ({self.license_number})"
+
+
+class Contract(TenantAwareModel):
+	driver = models.ForeignKey(Driver, related_name="contract", on_delete=models.CASCADE)
+	car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
+	is_active = models.BooleanField(default=True)
+	expect_daily_revenue = models.IntegerField(default=0)
+	holiday_expect_revenu = models.IntegerField(default=0)
+
+	class Meta:
+		verbose_name = "Contract"
+		verbose_name_plural = "Contracts"
+
+	def __str__(self):
+		pass
