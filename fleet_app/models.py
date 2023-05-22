@@ -52,10 +52,11 @@ class Contract(TenantAwareModel):
 	is_active = models.BooleanField(default=True)
 	expect_daily_revenue = models.IntegerField(default=0)
 	holiday_expect_revenu = models.IntegerField(default=0)
+	rest_days = models.ManyToManyField('core.DayOfTheWeek', related_name='contracts')
 
 	class Meta:
 		verbose_name = "Contract"
 		verbose_name_plural = "Contracts"
 
 	def __str__(self):
-		pass
+		return str(self.driver)
