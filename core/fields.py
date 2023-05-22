@@ -3,8 +3,10 @@ from .utils import DAY_OF_THE_WEEK
 
 
 class DaysChoice(models.IntegerChoices):
+	global key, value, variable_name
 	for key, value in DAY_OF_THE_WEEK.items():
-		locals()[value] = key
+		variable_name = value.replace(" ", "").replace("-", "").replace("'", "")
+		locals()[variable_name] = key
 
 
 class DayOfTheWeekField(models.IntegerField):
