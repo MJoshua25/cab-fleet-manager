@@ -14,3 +14,19 @@ class FleetUser(TenantAwareModel):
 
 	def __str__(self):
 		return self.user.username
+
+
+class Car(TenantAwareModel):
+	model = models.CharField(max_length=50)
+	brand = models.CharField(max_length=50)
+	matriculation = models.CharField(max_length=50)
+	color = models.CharField(max_length=50)
+	on_service = models.BooleanField(default=True)
+
+	class Meta:
+		verbose_name = "Car"
+		verbose_name_plural = "Cars"
+		unique_together = ("tenant", "matriculation")
+
+	def __str__(self):
+		return self.matriculation
