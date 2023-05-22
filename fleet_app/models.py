@@ -30,3 +30,17 @@ class Car(TenantAwareModel):
 
 	def __str__(self):
 		return self.matriculation
+
+
+class Driver(TenantAwareModel):
+	last_name = models.CharField(max_length=50)
+	first_name = models.CharField(max_length=255)
+	phone_number = models.CharField(max_length=50)
+	license_number = models.CharField(max_length=50)
+
+	class Meta:
+		verbose_name = "Driver"
+		verbose_name_plural = "Drivers"
+
+	def __str__(self):
+		return f"{self.first_name} {self.last_name} ({self.license_number})"
