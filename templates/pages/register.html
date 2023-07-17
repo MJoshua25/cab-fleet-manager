@@ -61,138 +61,141 @@
   </head>
 
   <body>
-   <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-    <!-- Content -->
+    <div class="authentication-wrapper authentication-cover authentication-bg">
+      <div class="authentication-inner row">
+        <!-- Left Text -->
+        <div
+          class="d-none d-lg-flex col-lg-4 align-items-center justify-content-center p-5 auth-cover-bg-color position-relative auth-multisteps-bg-height">
+          <img
+            src="{% static 'application/img/illustrations/auth-register-multisteps-illustration.png' %}"
+            alt="auth-register-multisteps"
+            class="img-fluid"
+            width="280" />
 
-    <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
+          <img
+            src="{% static 'application/img/illustrations/bg-shape-image-light.png' %}"
+            alt="auth-register-multisteps"
+            class="platform-bg"
+            data-app-light-img="illustrations/bg-shape-image-light.png"
+            data-app-dark-img="illustrations/bg-shape-image-dark.png" />
+        </div>
+        <!-- /Left Text -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-                <center>
-                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Créer votre compte </h4>
-                </center>
-
-
-              <!-- Default -->
-              <div class="row">
-
-                <!-- Default Wizard -->
-                <div class="col-12 mb-4">
-                  <div class="bs-stepper wizard-numbered mt-2">
-                    <div class="bs-stepper-header">
-                      <div class="step" data-target="#account-details">
-                        <button type="button" class="step-trigger">
-                          <span class="bs-stepper-circle">1</span>
-                          <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Données de l'entreprise</span>
-                          </span>
-                        </button>
-                      </div>
-                      <div class="line">
-                        <i class="ti ti-chevron-right"></i>
-                      </div>
-                      <div class="step" data-target="#personal-info">
-                        <button type="button" class="step-trigger">
-                          <span class="bs-stepper-circle">2</span>
-                          <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">Infos personnelles</span>
-                          </span>
-                        </button>
-                      </div>
-
+        <!--  Multi Steps Registration -->
+        <div class="d-flex col-lg-8 align-items-center justify-content-center p-sm-5 p-3">
+          <div class="w-px-700">
+            <div id="multiStepsValidation" class="bs-stepper shadow-none">
+              <div class="bs-stepper-header border-bottom-0">
+                <div class="step" data-target="#accountDetailsValidation">
+                  <button type="button" class="step-trigger">
+                    <span class="bs-stepper-circle"><i class="ti ti-smart-home ti-sm"></i></span>
+                    <span class="bs-stepper-label">
+                      <span class="bs-stepper-title">Données de l'entreprise</span>
+                    </span>
+                  </button>
+                </div>
+                <div class="line">
+                  <i class="ti ti-chevron-right"></i>
+                </div>
+                <div class="step" data-target="#personalInfoValidation">
+                  <button type="button" class="step-trigger">
+                    <span class="bs-stepper-circle"><i class="ti ti-users ti-sm"></i></span>
+                    <span class="bs-stepper-label">
+                      <span class="bs-stepper-title">Informations personnelles</span>
+                    </span>
+                  </button>
+                </div>
+                <div class="line">
+                  <i class="ti ti-chevron-right"></i>
+                </div>
+              </div>
+              <div class="bs-stepper-content">
+                <form id="multiStepsForm" onSubmit="return false">
+                  <!-- Account Details -->
+                  <div id="accountDetailsValidation" class="content">
+                    <div class="content-header mb-4">
+                      <h3 class="mb-1">Données de l'entreprise</h3>
+                      <p>Entrez les données de l'entreprise</p>
                     </div>
-                    <div class="bs-stepper-content">
-                      <form onSubmit="return false">
-                        <!-- Account Details -->
-                        <div id="account-details" class="content">
-                          <div class="content-header mb-3">
-                            <h6 class="mb-0">Données de l'entreprise</h6>
-                          </div>
-                          <div class="row g-3">
-                            <div class="col-sm-6">
-                              <label class="form-label" for="name">Nom du tenant</label>
-                              <input type="text" id="name" class="form-control" placeholder="johndoe" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="form-label" for="uniqdomain">Nom du domaine</label>
-                                <input type="text" id="uniqdomain" class="form-control" placeholder="flotteTaxi" />
-                              </div>
-                            <div class="col-12 d-flex justify-content-between">
-                              <button class="btn btn-label-secondary btn-prev" disabled>
-                                <i class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                              </button>
-                              <button class="btn btn-primary btn-next">
-                                <span class="align-middle d-sm-inline-block d-none me-sm-1">Next</span>
-                                <i class="ti ti-arrow-right"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Personal Info -->
-                        <div id="personal-info" class="content">
-                          <div class="content-header mb-3">
-                            <h6 class="mb-0">Infos personnelles</h6>
-                          </div>
-                          <div class="row g-3">
-                            <div class="col-sm-6">
-                              <label class="form-label" for="username">Nom d'utilisateur</label>
-                              <input type="text" name="username" id="username" class="form-control" placeholder="John" />
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="form-label" for="formValidationEmail">Email</label>
-                                <input
-                                  type="email"
-                                  name="email"
-                                  id="email"
-                                  class="form-control"
-                                  placeholder="john.doe@email.com"
-                                  aria-label="john.doe" />
-                              </div>
-                              <div class="col-sm-6">
-                                <label class="form-label" for="lastname">Contact</label>
-                                <input type="text" name="tel" id="contact" class="form-control" placeholder="0708674533" />
-                              </div>
-                              <div class="col-sm-6 form-password-toggle">
-                                <label class="form-label" for="formValidationPass">Password</label>
-                                <div class="input-group input-group-merge">
-                                  <input
-                                    type="password"
-                                    id="formValidationPass"
-                                    name="formValidationPass"
-                                    class="form-control"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="formValidationPass2" />
-                                  <span class="input-group-text cursor-pointer" id="formValidationPass2"
-                                    ><i class="ti ti-eye-off"></i
-                                  ></span>
-                                </div>
-                              </div>
-                            <div class="col-12 d-flex justify-content-between">
-                              <button class="btn btn-label-secondary btn-prev">
-                                <i class="ti ti-arrow-left me-sm-1 me-0"></i>
-                                <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                              </button>
-                              <button class="btn btn-success btn-next btn-submit">Submit</button>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Social Links -->
-                      </form>
+                    <div class="row g-3">
+                      <div class="col-sm-6">
+                        <label class="form-label" for="name">Nom du tenant</label>
+                        <input type="text" id="name" class="form-control" placeholder="johndoe" />
+                      </div>
+                      <div class="col-sm-6">
+                        <label class="form-label" for="uniqdomain">Nom du domaine</label>
+                        <input type="text" id="uniqdomain" class="form-control" placeholder="flotteTaxi" />
+                      </div>
+
+                      <div class="col-12 d-flex justify-content-between mt-4">
+                        <button class="btn btn-label-secondary btn-prev" disabled>
+                          <i class="ti ti-arrow-left ti-xs me-sm-1 me-0"></i>
+                          <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                        </button>
+                        <button class="btn btn-primary btn-next">
+                          <span class="align-middle d-sm-inline-block d-none me-sm-1 me-0">Next</span>
+                          <i class="ti ti-arrow-right ti-xs"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <!-- /Default Wizard -->
+                  <!-- Personal Info -->
+                  <div id="personalInfoValidation" class="content">
+                    <div class="content-header mb-4">
+                      <h3 class="mb-1">Informations personnelles</h3>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                          <label class="form-label" for="username">Nom d'utilisateur</label>
+                          <input type="text" name="username" id="username" class="form-control" placeholder="John" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label" for="formValidationEmail">Email</label>
+                            <input
+                              type="email"
+                              name="email"
+                              id="email"
+                              class="form-control"
+                              placeholder="john.doe@email.com"
+                              aria-label="john.doe" />
+                          </div>
+                          <div class="col-sm-6">
+                            <label class="form-label" for="lastname">Contact</label>
+                            <input type="text" name="tel" id="contact" class="form-control" placeholder="0708674533" />
+                          </div>
+                          <div class="col-sm-6 form-password-toggle">
+                            <label class="form-label" for="formValidationPass">Password</label>
+                            <div class="input-group input-group-merge">
+                              <input
+                                type="password"
+                                id="formValidationPass"
+                                name="formValidationPass"
+                                class="form-control"
+                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                aria-describedby="formValidationPass2" />
+                              <span class="input-group-text cursor-pointer" id="formValidationPass2"
+                                ><i class="ti ti-eye-off"></i
+                              ></span>
+                            </div>
+                          </div>
+                        <div class="col-12 d-flex justify-content-between">
+                          <button class="btn btn-label-secondary btn-prev">
+                            <i class="ti ti-arrow-left me-sm-1 me-0"></i>
+                            <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                          </button>
+                          <button class="btn btn-success btn-next btn-submit">Valider</button>
+                        </div>
+                      </div>
+                  </div>
 
+                </form>
               </div>
             </div>
-            <!-- / Content -->
-
           </div>
-          </div>
-       </div>
+        </div>
+        <!-- / Multi Steps Registration -->
+      </div>
+    </div>
 
     <!-- / Content -->
 
