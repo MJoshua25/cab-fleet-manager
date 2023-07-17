@@ -7,5 +7,5 @@ urlpatterns = [
 	path('', main.index, name='home'),
 	path('connexion', main.login, name='login'),
 	path('inscriprion', main.register, name='register'),
-	path('<str:tenant>/', include('core.urls.tenant')),
+	path('<str:tenant>/', include('core.urls.tenant'), name='tenant'),
 ]

@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate
 # from blog import models
 
 
@@ -12,6 +13,14 @@ def index(request):
 
 
 def login(request):
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		password = request.POST.get('password')
+		if username and password:
+			user = authenticate(username=username, password=password)
+			if hasattr(user, 'profile'):
+				tenant = user.profile.tenant
+				return redirect('core:tenant:home', tenant=tenant)
 	data = {
 		'titre': "page de connexion",
 		# 'cats': models.Categorie.objects.filter(status=True)
