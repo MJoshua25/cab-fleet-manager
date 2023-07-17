@@ -9,7 +9,7 @@ class RegistrationTest(unittest.TestCase):
 
     def test_details(self):
         # Issue a GET request.
-        response = self.client.get("/register")
+        response = self.client.get("/inscription")
 
         # Check that the response is 200 OK.
         self.assertEqual(response.status_code, 200)
