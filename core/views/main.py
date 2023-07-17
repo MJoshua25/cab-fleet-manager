@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 def index(request):
 	data = {
-		'titre': "pade d'accueil",
+		'titre': "page d'accueil",
 		# 'cats': models.Categorie.objects.filter(status=True)
 	}
 	return render(request, 'pages/index.html', data)
@@ -13,7 +13,7 @@ def index(request):
 
 def login(request):
 	data = {
-		'titre': "pade d'accueil",
+		'titre': "page de connexion",
 		# 'cats': models.Categorie.objects.filter(status=True)
 	}
 	return render(request, 'pages/login.html', data)
@@ -21,7 +21,7 @@ def login(request):
 
 def register(request):
 	data = {
-		'titre': "pade d'accueil",
+		'titre': "page d'inscription",
 		# 'cats': models.Categorie.objects.filter(status=True)
 	}
 	return render(request, 'pages/register.html', data)
