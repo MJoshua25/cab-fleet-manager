@@ -110,8 +110,9 @@
                 </div>
               </div>
               <div class="bs-stepper-content">
-                <form id="multiStepsForm" method="post" action="">
-                  <!-- Account Details -->
+                <form id="multiStepsForm" method="post" action="{% url 'core:addTenantUser' %}">
+                  {% csrf_token %}
+                    <!-- Account Details -->
                   <div id="accountDetailsValidation" class="content">
                     <div class="content-header mb-4">
                       <h3 class="mb-1">Données de l'entreprise</h3>
@@ -120,11 +121,11 @@
                     <div class="row g-3">
                       <div class="col-sm-6">
                         <label class="form-label" for="name">Nom du tenant</label>
-                        <input type="text" id="name" class="form-control" placeholder="johndoe" />
+                        <input type="text" name="name" id="name" class="form-control" placeholder="johndoe" />
                       </div>
                       <div class="col-sm-6">
                         <label class="form-label" for="uniqdomain">Nom du domaine</label>
-                        <input type="text" id="uniqdomain" class="form-control" placeholder="flotteTaxi" />
+                        <input type="text" name="uniqdomain" id="uniqdomain" class="form-control" placeholder="flotteTaxi" />
                       </div>
 
                       <div class="col-12 d-flex justify-content-between mt-4">
@@ -146,6 +147,14 @@
                     </div>
                     <div class="row g-3">
                         <div class="col-sm-6">
+                          <label class="form-label" for="lastname">Nom</label>
+                          <input type="text" name="lastname" id="lastname" class="form-control" placeholder="John" />
+                        </div>
+                        <div class="col-sm-6">
+                          <label class="form-label" for="firstname">Prénoms</label>
+                          <input type="text" name="firstname" id="firstname" class="form-control" placeholder="John" />
+                        </div>
+                        <div class="col-sm-6">
                           <label class="form-label" for="username">Nom d'utilisateur</label>
                           <input type="text" name="username" id="username" class="form-control" placeholder="John" />
                         </div>
@@ -160,8 +169,8 @@
                               aria-label="john.doe" />
                           </div>
                           <div class="col-sm-6">
-                            <label class="form-label" for="lastname">Contact</label>
-                            <input type="text" name="tel" id="contact" class="form-control" placeholder="0708674533" />
+                            <label class="form-label" for="tel">Contact</label>
+                            <input type="text" name="contact" id="contact" class="form-control" placeholder="0708674533" />
                           </div>
                           <div class="col-sm-6 form-password-toggle">
                             <label class="form-label" for="formValidationPass">Password</label>
@@ -169,7 +178,7 @@
                               <input
                                 type="password"
                                 id="formValidationPass"
-                                name="formValidationPass"
+                                name="password"
                                 class="form-control"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 aria-describedby="formValidationPass2" />
@@ -183,7 +192,7 @@
                             <i class="ti ti-arrow-left me-sm-1 me-0"></i>
                             <span class="align-middle d-sm-inline-block d-none">Previous</span>
                           </button>
-                          <button class="btn btn-success btn-next btn-submit">Valider</button>
+                          <button type="submit" class="btn btn-success btn-next btn-submit">Valider</button>
                         </div>
                       </div>
                   </div>
