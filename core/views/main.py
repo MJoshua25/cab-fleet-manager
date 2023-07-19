@@ -1,8 +1,9 @@
-from django.contrib.auth import models
-from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
+from django.http import HttpResponseRedirect, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from tenant import models as tenant_models
 from fleet_app import models as fleet_models
+from core import models
+
 
 # from blog import models
 
@@ -34,7 +35,7 @@ def register(request):
 def addTenantUser(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         name = request.POST.get('name')
-        uniqdomain = request.POST.get('uniqdomain')
+        unique_domain = request.POST.get('unique_domain')
         lastname = request.POST.get('lastname')
         firstname = request.POST.get('firstname')
         username = request.POST.get('username')
@@ -43,9 +44,9 @@ def addTenantUser(request: HttpRequest) -> HttpResponse:
         password = request.POST.get('password')
         add_tenant = tenant_models.Tenant(
             name=name,
-            unique_domain=uniqdomain
+            unique_domain=unique_domain
         )
-        u = models.User(
+        u = fleet_models.User(
             first_name=firstname,
             last_name=lastname,
             username=username,
@@ -61,3 +62,11 @@ def addTenantUser(request: HttpRequest) -> HttpResponse:
         return redirect("core:home")
     else:
         return redirect("core:home")
+
+
+def validate_domain(request):
+    unique_domain = request.POST.get('unique_domain', None)
+    data = {
+        'is_taken': tenant_models.Tenant.objects.filter(unique_domain=unique_domain).exists()
+    }
+    return JsonResponse(data)
