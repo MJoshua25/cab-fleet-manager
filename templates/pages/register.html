@@ -115,7 +115,7 @@
 
                       </div>
                       <div class="bs-stepper-content">
-                        <form method="post" action="{% url 'core:addTenantUser' %}">
+                        <form onSubmit="return soumettreFormulaire()" method="post" action="{% url 'core:addTenantUser' %}">
                          {% csrf_token %}
                           <!-- Account Details -->
                           <div id="account-details" class="content">
@@ -195,7 +195,7 @@
                                   <i class="ti ti-arrow-left me-sm-1 me-0"></i>
                                   <span class="align-middle d-sm-inline-block d-none">Previous</span>
                                 </button>
-                                <button type="submit" class="btn btn-success btn-next btn-submit">Valider</button>
+                                <button type="submit" class="btn btn-success btn-next btn-submit" onclick="sub=true">Valider</button>
                               </div>
                             </div>
                           </div>
@@ -251,22 +251,42 @@
 </html>
 <script>
     $(document).ready(function(){
-    $("#unique_domain").change(function () {
-      var unique_domain = $(this).val();
+        $("#unique_domain").change(function () {
+          var unique_domain = $(this).val();
 
-      $.ajax({
-        url: '/validate_domain/',
-        data: {
-          'unique_domain': unique_domain
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.is_taken) {
-            alert("Le domaine a déja été utilisé.");
-          }
-        }
-      });
+          $.ajax({
+            url: '/validate_domain/',
+            data: {
+              'unique_domain': unique_domain
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                alert("Le domaine a déja été utilisé.");
+              }
+            }
+          });
 
+        });
     });
-});
+    var sub = false;
+    function soumettreFormulaire() {
+      if (sub) return true;
+      // Vous pouvez effectuer ici des vérifications et des traitements supplémentaires
+      // Si tout est en ordre, vous pouvez retourner true pour permettre la soumission
+      // Si une condition n'est pas remplie, retournez false pour empêcher la soumission
+
+      // Exemple de vérification simple :
+      var name = document.getElementById('name').value;
+      var unique_domain = document.getElementById('unique_domain').value;
+      var lastname = document.getElementById('lastname').value;
+
+      if (name === '' || unique_domain === '' || lastname === '') {
+        {#alert("Veuillez remplir tous les champs du formulaire.");#}
+        return false; // Empêche la soumission si des champs sont vides
+      }
+
+      // Si tout est en ordre, vous pouvez retourner true pour permettre la soumission
+      return true;
+    }
 </script>
