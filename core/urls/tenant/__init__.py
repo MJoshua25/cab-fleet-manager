@@ -1,8 +1,8 @@
 from django.urls import path, include
-from core.views import main
+from core.views import tenant
 
 app_name = 'tenant'
 
 urlpatterns = [
-	path('', main.index, name='home'),
+	path('', tenant.index, name='home'),
 ]
