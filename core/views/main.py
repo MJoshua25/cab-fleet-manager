@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect, HttpRequest, HttpResponse, JsonRes
 from django.shortcuts import render, redirect
 from tenant import models as tenant_models
 from fleet_app import models as fleet_models
+from django.db import transaction
 from core import models
 
 
@@ -40,8 +41,9 @@ def addTenantUser(request: HttpRequest) -> HttpResponse:
         firstname = request.POST.get('firstname')
         username = request.POST.get('username')
         email = request.POST.get('email')
-        contact = request.POST.get('contact')
-        password = request.POST.get('password')
+        contact = request.POST.get('tel')
+        password = request.POST.get('formValidationPass')
+        # TODO: Valider les donner avant de continuer
         add_tenant = tenant_models.Tenant(
             name=name,
             unique_domain=unique_domain
@@ -55,10 +57,13 @@ def addTenantUser(request: HttpRequest) -> HttpResponse:
         )
         add_fleetUser = fleet_models.FleetUser(
             user=u,
+            tenant=add_tenant,
             contact=contact,
         )
-        add_tenant.save()
-        add_fleetUser.save()
+        with transaction.atomic():
+            add_tenant.save()
+            u.save()
+            add_fleetUser.save()
         return redirect("core:home")
     else:
         return redirect("core:home")
