@@ -5,24 +5,9 @@ from fleet_app import models as fleet_models
 from django.db import transaction
 from core import models
 
+from django.contrib.auth import authenticate
 
-# from blog import models
-
-
-def index(request):
-    data = {
-        'titre': "pade d'accueil",
-        # 'cats': models.Categorie.objects.filter(status=True)
-    }
-    return render(request, 'pages/index.html', data)
-
-
-def login(request):
-    data = {
-        'titre': "pade d'accueil",
-        # 'cats': models.Categorie.objects.filter(status=True)
-    }
-    return render(request, 'pages/login.html', data)
+from core.forms.auth import LoginForm
 
 
 def register(request):
@@ -67,6 +52,32 @@ def addTenantUser(request: HttpRequest) -> HttpResponse:
         return redirect("core:home")
     else:
         return redirect("core:home")
+
+
+def index(request):
+	data = {
+		'titre': "page d'accueil",
+		# 'cats': models.Categorie.objects.filter(status=True)
+	}
+	return render(request, 'pages/index.html', data)
+
+
+def login(request):
+	if request.method == 'POST':
+		form = LoginForm(request.POST)
+		if form.is_valid():
+			user = authenticate(
+				username=form.cleaned_data["username"],
+				password=form.cleaned_data["password"]
+			)
+			if hasattr(user, 'profile'):
+				tenant = user.profile.tenant
+				return redirect('core:tenant:home', tenant=tenant)
+	data = {
+		'titre': "page de connexion",
+		# 'cats': models.Categorie.objects.filter(status=True)
+	}
+	return render(request, 'pages/login.html', data)
 
 
 def validate_domain(request):

@@ -9,4 +9,5 @@ urlpatterns = [
 	path('register', main.register, name='register'),
 	path('addTenantUser/', main.addTenantUser, name='addTenantUser'),
 	path('validate_domain/', main.validate_domain, name='validate_domain'),
+	path('<str:tenant>/', include('core.urls.tenant'), name='tenant'),
 ]
