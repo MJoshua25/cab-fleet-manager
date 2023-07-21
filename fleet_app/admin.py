@@ -6,8 +6,8 @@ import fleet_app.models as models
 
 class FleetUserAdmin(admin.ModelAdmin):
 
-    list_display = ('id', 'statut', 'date_add', 'date_upd', 'tenant', 'user')
-    list_filter = ('statut', 'date_add', 'date_upd', 'tenant', 'user', 'id')
+    list_display = ('id', 'statut', 'date_add', 'date_upd', 'tenant', 'user', 'contact')
+    list_filter = ('statut', 'date_add', 'date_upd', 'tenant', 'user', 'contact', 'id')
 
 
 class CarAdmin(admin.ModelAdmin):

@@ -53,7 +53,8 @@ $(function () {
     }
     if (wizardNumberedBtnSubmit) {
       wizardNumberedBtnSubmit.addEventListener('click', event => {
-        alert('Submitted..!!');
+        console.log('submit')
+        numberedStepper.submit();
       });
     }
   }

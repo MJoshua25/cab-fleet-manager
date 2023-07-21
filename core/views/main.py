@@ -1,8 +1,57 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from tenant import models as tenant_models
+from fleet_app import models as fleet_models
+from django.db import transaction
+from core import models
+
 from django.contrib.auth import authenticate
 
 from core.forms.auth import LoginForm
+
+
+def register(request):
+    data = {
+        'titre': "pade d'accueil",
+        # 'cats': models.Categorie.objects.filter(status=True)
+    }
+    return render(request, 'pages/register.html', data)
+
+
+def addTenantUser(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        name = request.POST.get('name')
+        unique_domain = request.POST.get('unique_domain')
+        lastname = request.POST.get('lastname')
+        firstname = request.POST.get('firstname')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        contact = request.POST.get('tel')
+        password = request.POST.get('formValidationPass')
+        # TODO: Valider les donner avant de continuer
+        add_tenant = tenant_models.Tenant(
+            name=name,
+            unique_domain=unique_domain
+        )
+        u = fleet_models.User(
+            first_name=firstname,
+            last_name=lastname,
+            username=username,
+            email=email,
+            password=password
+        )
+        add_fleetUser = fleet_models.FleetUser(
+            user=u,
+            tenant=add_tenant,
+            contact=contact,
+        )
+        with transaction.atomic():
+            add_tenant.save()
+            u.save()
+            add_fleetUser.save()
+        return redirect("core:home")
+    else:
+        return redirect("core:home")
 
 
 def index(request):
@@ -31,10 +80,9 @@ def login(request):
 	return render(request, 'pages/login.html', data)
 
 
-def register(request):
-	data = {
-		'titre': "page d'inscription",
-		# 'cats': models.Categorie.objects.filter(status=True)
-	}
-	return render(request, 'pages/register.html', data)
-
+def validate_domain(request):
+    unique_domain = request.POST.get('unique_domain', None)
+    data = {
+        'is_taken': tenant_models.Tenant.objects.filter(unique_domain=unique_domain).exists()
+    }
+    return JsonResponse(data)
