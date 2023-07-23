@@ -23,6 +23,7 @@ class CarAdmin(admin.ModelAdmin):
         'matriculation',
         'color',
         'on_service',
+        'VehiculePaper'
     )
     list_filter = (
         'statut',
@@ -35,6 +36,7 @@ class CarAdmin(admin.ModelAdmin):
         'brand',
         'matriculation',
         'color',
+        'VehiculePaper'
     )
 
 
