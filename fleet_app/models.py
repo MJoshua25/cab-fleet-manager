@@ -23,6 +23,7 @@ class Car(TenantAwareModel):
     matriculation = models.CharField(max_length=50)
     color = models.CharField(max_length=50)
     on_service = models.BooleanField(default=True)
+    VehiculePaper = models.FileField(upload_to='uploads/')
 
     class Meta:
         verbose_name = "Car"
