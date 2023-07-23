@@ -56,6 +56,7 @@ class Contract(TenantAwareModel):
     expect_daily_revenue = models.IntegerField(default=0)
     holiday_expect_revenu = models.IntegerField(default=0)
     rest_days = models.ManyToManyField('core.DayOfTheWeek', related_name='contracts')
+    scanContrat = models.FileField(upload_to='uploads/')
 
     class Meta:
         verbose_name = "Contract"
