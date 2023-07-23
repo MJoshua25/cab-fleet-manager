@@ -99,17 +99,17 @@
                 </a>
                 <ul class="menu-sub">
                   <li class="menu-item">
-                    <a href="index.html" class="menu-link">
+                    <a href="{% url 'fleet:carGestion' %}" class="menu-link">
                       <div>Gestion d'une voiture</div>
                     </a>
                   </li>
                   <li class="menu-item">
-                    <a href="dashboards-crm.html" class="menu-link">
+                    <a href="{% url 'fleet:driverGestion' %}" class="menu-link">
                       <div>Gestion du driver</div>
                     </a>
                   </li>
                   <li class="menu-item">
-                    <a href="dashboards-ecommerce.html" class="menu-link">
+                    <a href="{% url 'fleet:contratGestion' %}" class="menu-link">
                       <div>Gestion des contrats </div>
                     </a>
                   </li>
