@@ -55,29 +55,29 @@ def addTenantUser(request: HttpRequest) -> HttpResponse:
 
 
 def index(request):
-	data = {
-		'titre': "page d'accueil",
-		# 'cats': models.Categorie.objects.filter(status=True)
-	}
-	return render(request, 'pages/index.html', data)
+    data = {
+        'titre': "page d'accueil",
+        # 'cats': models.Categorie.objects.filter(status=True)
+    }
+    return render(request, 'pages/index.html', data)
 
 
 def login(request):
-	if request.method == 'POST':
-		form = LoginForm(request.POST)
-		if form.is_valid():
-			user = authenticate(
-				username=form.cleaned_data["username"],
-				password=form.cleaned_data["password"]
-			)
-			if hasattr(user, 'profile'):
-				tenant = user.profile.tenant
-				return redirect('core:tenant:home', tenant=tenant)
-	data = {
-		'titre': "page de connexion",
-		# 'cats': models.Categorie.objects.filter(status=True)
-	}
-	return render(request, 'pages/login.html', data)
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data["password"]
+            )
+            if hasattr(user, 'profile'):
+                tenant = user.profile.tenant
+                return redirect('core:tenant:home', tenant=tenant)
+    data = {
+        'titre': "page de connexion",
+        # 'cats': models.Categorie.objects.filter(status=True)
+    }
+    return render(request, 'pages/login.html', data)
 
 
 def validate_domain(request):
