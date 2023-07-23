@@ -52,6 +52,7 @@ class DriverAdmin(admin.ModelAdmin):
         'first_name',
         'phone_number',
         'license_number',
+        'driver_license'
     )
     list_filter = (
         'statut',
@@ -63,6 +64,7 @@ class DriverAdmin(admin.ModelAdmin):
         'first_name',
         'phone_number',
         'license_number',
+        'driver_license'
     )
 
 
