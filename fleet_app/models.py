@@ -39,6 +39,7 @@ class Driver(TenantAwareModel):
     first_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=50)
     license_number = models.CharField(max_length=50)
+    driver_license = models.FileField(upload_to='uploads/')
 
     class Meta:
         verbose_name = "Driver"
