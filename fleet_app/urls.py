@@ -5,5 +5,6 @@ app_name = 'fleet'
 
 urlpatterns = [
 	path('carGestion', views.carGestion, name='carGestion'),
-
+	path('driverGestion', views.driverGestion, name='driverGestion'),
+	path('contratGestion', views.contratGestion, name='contratGestion'),
 ]
