@@ -22,7 +22,7 @@ class CarAdmin(admin.ModelAdmin):
         'brand',
         'matriculation',
         'color',
-        'on_service',
+        'on_service'
     )
     list_filter = (
         'statut',
@@ -34,7 +34,7 @@ class CarAdmin(admin.ModelAdmin):
         'model',
         'brand',
         'matriculation',
-        'color',
+        'color'
     )
 
 
@@ -50,6 +50,7 @@ class DriverAdmin(admin.ModelAdmin):
         'first_name',
         'phone_number',
         'license_number',
+        'driver_license'
     )
     list_filter = (
         'statut',
@@ -61,6 +62,7 @@ class DriverAdmin(admin.ModelAdmin):
         'first_name',
         'phone_number',
         'license_number',
+        'driver_license'
     )
 
 
@@ -76,7 +78,7 @@ class ContractAdmin(admin.ModelAdmin):
         'car',
         'is_active',
         'expect_daily_revenue',
-        'holiday_expect_revenu',
+        'holiday_expect_revenu'
     )
     list_filter = (
         'statut',
@@ -88,7 +90,7 @@ class ContractAdmin(admin.ModelAdmin):
         'is_active',
         'id',
         'expect_daily_revenue',
-        'holiday_expect_revenu',
+        'holiday_expect_revenu'
     )
     raw_id_fields = ('rest_days',)
 

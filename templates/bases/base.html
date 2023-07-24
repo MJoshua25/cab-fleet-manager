@@ -44,6 +44,8 @@
     <link rel="stylesheet" href="{% static 'application/vendor/libs/typeahead-js/typeahead.css' %}" />
 
     <!-- Page CSS -->
+    {% block page_css %}
+    {% endblock %}
 
     <!-- Helpers -->
     <script src="{% static 'application/vendor/js/helpers.js' %}"></script>
@@ -56,7 +58,6 @@
   <body>
     <!-- Content -->
     {% block content %}
-
     {% endblock %}
     <!-- / Content -->
 
@@ -75,11 +76,16 @@
     <script src="{% static 'application/vendor/js/menu.js' %}"></script>
     <!-- endbuild -->
 
+    {% block before_main_js %}
+    {% endblock %}
+
     <!-- Vendors JS -->
 
     <!-- Main JS -->
     <script src="{% static 'application/js/main.js' %}"></script>
 
     <!-- Page JS -->
+    {% block after_main_js %}
+    {% endblock %}
   </body>
 </html>

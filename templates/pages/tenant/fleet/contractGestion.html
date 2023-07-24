@@ -1,0 +1,65 @@
+{% extends 'bases/admin/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de la flotte /</span> Gestion des contrats </h4>
+       <hr class="my-5" />
+       <!-- Responsive Datatable -->
+       <div class="card">
+                <h5 class="card-header">Gestion des contrats </h5>
+                <div class="card-datatable table-responsive">
+                  <table class="dt-responsive table">
+                    <thead>
+                      <tr>
+                        <th>Conducteur</th>
+                        <th>Voiture</th>
+                        <th>Actif</th>
+                        <th>Jour de travail</th>
+                        <th>Revenu quotidien</th>
+                        <th>Contrat scanné</th>
+                    </thead>
+                      <tr>
+                          <td>Yao Kpa</td>
+                          <td>Mercédes</td>
+                          <td>Oui</td>
+                          <td>Lundi,Mardi,Vendredi</td>
+                          <td>35000frs</td>
+                          <td>papier.pdf</td>
+                      </tr>
+                      <tr>
+                          <td>Yao Ka</td>
+                          <td>Mercédes</td>
+                          <td>Oui</td>
+                          <td>Lundi,Mardi,Vendredi</td>
+                          <td>35000frs</td>
+                          <td>papier.pdf</td>
+                      </tr>
+                  </table>
+                </div>
+              </div>
+              <!--/ Responsive Datatable -->
+            </div>
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}

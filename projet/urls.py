@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin/filebrowser/', site.urls),
     path('', include('core.urls.main')),
+    path('fleet/', include('fleet_app.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
