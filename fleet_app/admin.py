@@ -78,8 +78,7 @@ class ContractAdmin(admin.ModelAdmin):
         'car',
         'is_active',
         'expect_daily_revenue',
-        'holiday_expect_revenu',
-        'scanContrat'
+        'holiday_expect_revenu'
     )
     list_filter = (
         'statut',
@@ -91,8 +90,7 @@ class ContractAdmin(admin.ModelAdmin):
         'is_active',
         'id',
         'expect_daily_revenue',
-        'holiday_expect_revenu',
-        'scanContrat'
+        'holiday_expect_revenu'
     )
     raw_id_fields = ('rest_days',)
 
