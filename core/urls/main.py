@@ -5,9 +5,9 @@ app_name = 'core'
 
 urlpatterns = [
 	path('', main.index, name='home'),
-	path('login', main.login, name='login'),
-	path('register', main.register, name='register'),
-	path('addTenantUser/', main.addTenantUser, name='addTenantUser'),
-	path('validate_domain/', main.validate_domain, name='validate_domain'),
+	path('connexion', main.login, name='login'),
+	path('inscription', main.register, name='register'),
+	path('ajout_tenant_utilisateur/', main.add_tenant_user, name='add_tenant_user'),
+	path('valider_domaine/', main.validate_domain, name='validate_domain'),
 	path('<str:tenant>/', include('core.urls.tenant'), name='tenant'),
 ]

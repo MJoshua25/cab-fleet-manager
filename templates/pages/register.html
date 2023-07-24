@@ -115,7 +115,7 @@
 
                       </div>
                       <div class="bs-stepper-content">
-                        <form onSubmit="return soumettreFormulaire()" method="post" action="{% url 'core:addTenantUser' %}">
+                        <form onSubmit="return soumettreFormulaire()" method="post" action="{% url 'core:add_tenant_user' %}">
                          {% csrf_token %}
                           <!-- Account Details -->
                           <div id="account-details" class="content">
