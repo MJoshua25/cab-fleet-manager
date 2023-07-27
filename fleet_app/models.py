@@ -85,14 +85,26 @@ class Outages(Expenses):
     location = models.CharField(max_length=100)
     is_Okay = models.BooleanField()
 
+    class Meta:
+        verbose_name = "Outage"
+        verbose_name_plural = "Outages"
+
 
 class Insurance(Expenses):
     car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
     insurance_company = models.CharField(max_length=100)
     validity_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Insurance"
+        verbose_name_plural = "Insurances"
+
 
 class OilChange(Expenses):
     car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
     OilType = models.CharField(max_length=100)
     service_center = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "OilChange"
+        verbose_name_plural = "OilChanges"
