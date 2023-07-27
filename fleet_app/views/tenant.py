@@ -1,24 +1,24 @@
-from django.shortcuts import render
-
+from django.views.generic import ListView
 from fleet_app import models as fleet_models
+from tenant.mixin import TenantAwareViewMixin
 
 
-def carGestion(request):
-    data = {
-        'cars': fleet_models.Car.objects.filter(statut=True)
-    }
-    return render(request, 'pages/fleet/carGestion.html', data)
+class CarListView(TenantAwareViewMixin, ListView):
+	template_name = 'pages/tenant/fleet/car_list.html'
+
+	def get_queryset(self):
+		return fleet_models.Car.objects.filter(statut=True, tenant=self.tenant)
 
 
-def driverGestion(request):
-    data = {
-        'drivers': fleet_models.Driver.objects.filter(statut=True)
-    }
-    return render(request, 'pages/fleet/driverGestion.html', data)
+class DriverListView(TenantAwareViewMixin, ListView):
+	template_name = 'pages/tenant/fleet/driver_list.html'
+
+	def get_queryset(self):
+		return fleet_models.Driver.objects.filter(statut=True, tenant=self.tenant)
 
 
-def contratGestion(request):
-    data = {
-        'contrats': fleet_models.Contract.objects.filter(statut=True)
-    }
-    return render(request, 'pages/fleet/contractGestion.html', data)
+class ContractListView(TenantAwareViewMixin, ListView):
+	template_name = 'pages/tenant/fleet/contract_list.html'
+
+	def get_queryset(self):
+		return fleet_models.Contract.objects.filter(statut=True, tenant=self.tenant)
