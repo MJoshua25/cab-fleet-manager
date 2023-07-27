@@ -1,4 +1,4 @@
-{% extends 'bases/admin/base.html' %}
+{% extends 'bases/tenant/base.html' %}
 {% load static %}
 
 {% block typeJs %}
@@ -8,38 +8,38 @@
  {% endblock %}
 
     <!-- Content -->
- {% block content %}
+ {% block tenant_content %}
   <div class="container-xxl flex-grow-1 container-p-y">
-       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de la flotte /</span> Gestion des contrats </h4>
        <hr class="my-5" />
        <!-- Responsive Datatable -->
        <div class="card">
-                <h5 class="card-header">Gestion des voitures</h5>
+                <h5 class="card-header">Gestion des contrats </h5>
                 <div class="card-datatable table-responsive">
                   <table class="dt-responsive table">
                     <thead>
                       <tr>
-                        <th>Modèle</th>
-                        <th>Marque</th>
-                        <th>Matriculation</th>
-                        <th>Couleur</th>
-                        <th>En service</th>
-                        <th>Document du véhicule</th>
+                        <th>Conducteur</th>
+                        <th>Voiture</th>
+                        <th>Actif</th>
+                        <th>Jour de travail</th>
+                        <th>Revenu quotidien</th>
+                        <th>Contrat scanné</th>
                     </thead>
                       <tr>
-                          <td>C450</td>
+                          <td>Yao Kpa</td>
                           <td>Mercédes</td>
-                          <td>1438LX01</td>
-                          <td>Noir</td>
                           <td>Oui</td>
+                          <td>Lundi,Mardi,Vendredi</td>
+                          <td>35000frs</td>
                           <td>papier.pdf</td>
                       </tr>
                       <tr>
-                          <td>C450</td>
+                          <td>Yao Ka</td>
                           <td>Mercédes</td>
-                          <td>1438LX01</td>
-                          <td>Noir</td>
                           <td>Oui</td>
+                          <td>Lundi,Mardi,Vendredi</td>
+                          <td>35000frs</td>
                           <td>papier.pdf</td>
                       </tr>
                   </table>

@@ -1,11 +1,7 @@
-from django.http import HttpResponseRedirect
+from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
+from tenant.mixin import TenantAwareViewMixin
 
 
-def index(request, tenant):
-	print(tenant)
-	data = {
-		'titre': "page d'accueil",
-		# 'cats': models.Categorie.objects.filter(status=True)
-	}
-	return render(request, 'pages/tenant/index.html', data)
+class IndexView(TenantAwareViewMixin, TemplateView):
+	template_name = 'pages/tenant/index.html'

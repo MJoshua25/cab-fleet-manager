@@ -5,7 +5,7 @@ from fleet_app import models as fleet_models
 from django.db import transaction
 from core import models
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login as auth_login
 
 from core.forms.auth import LoginForm
 
@@ -73,7 +73,8 @@ def login(request):
 				username=form.cleaned_data["username"],
 				password=form.cleaned_data["password"]
 			)
-			if hasattr(user, 'profile'):
+			if user is not None and hasattr(user, 'profile'):
+				auth_login(request, user)
 				tenant = user.profile.tenant
 				return redirect('core:tenant:home', tenant=tenant.unique_domain)
 	data = {
