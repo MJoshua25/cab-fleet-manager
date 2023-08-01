@@ -7,7 +7,7 @@ def carGestion(request):
     data = {
         'cars': fleet_models.Car.objects.filter(statut=True)
     }
-    return render(request, 'pages/fleet/carGestion.html', data)
+    return render(request, 'pages/tenant/fleet/carGestion.html', data)
 
 
 def driverGestion(request):
