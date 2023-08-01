@@ -3,6 +3,7 @@ from django.db import models
 from core.fields import DayOfTheWeekField
 from tenant.models import TenantAwareModel
 from django.contrib.auth.models import User
+from finance_app.models import Expense
 
 
 # Create your models here.
@@ -80,21 +81,7 @@ class OutageReason(models.Model):
         return str(self.name)
 
 
-class Expenses(models.Model):
-    amount = models.IntegerField(default=0)
-    Payment_Method = models.CharField(max_length=100)
-    date_add = models.DateTimeField(auto_now_add=True)
-    date_upd = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = "Expense"
-        verbose_name_plural = "Expenses"
-
-    def __str__(self):
-        return f"{self.amount} {self.Payment_Method}"
-
-
-class Insurance(models.Model):
+class Insurance(TenantAwareModel):
     car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
     insurance_company = models.CharField(max_length=100)
     due_date = models.DateTimeField(auto_now=True)
@@ -107,19 +94,19 @@ class Insurance(models.Model):
         verbose_name_plural = "Insurances"
 
 
-class Outages(Expenses):
+class Outages(Expense):
     car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
     driver = models.ForeignKey(Driver, related_name="contract", on_delete=models.CASCADE)
     reason = models.ForeignKey(OutageReason, related_name="motifPanne", on_delete=models.CASCADE)
     location = models.CharField(max_length=100)
-    is_Okay = models.BooleanField()
+    is_okay = models.BooleanField()
 
     class Meta:
         verbose_name = "Outage"
         verbose_name_plural = "Outages"
 
 
-class OilChange(Expenses):
+class OilChange(Expense):
     car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
     OilType = models.CharField(max_length=100)
     service_center = models.CharField(max_length=100)
@@ -128,19 +115,3 @@ class OilChange(Expenses):
     class Meta:
         verbose_name = "OilChange"
         verbose_name_plural = "OilChanges"
-
-
-class Payment(models.Model):
-    amount_payment = models.IntegerField(default=0)
-    driver = models.ForeignKey(Driver, related_name="contract", on_delete=models.CASCADE)
-    Payment_Method = models.CharField(max_length=100)
-    date_add = models.DateTimeField(auto_now_add=True)
-    day = DayOfTheWeekField()
-    is_soldOut = models.BooleanField()
-
-    class Meta:
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
-
-    def __str__(self):
-        return f"{self.driver} {self.Payment_Method}"
