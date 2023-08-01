@@ -52,12 +52,12 @@ class Driver(TenantAwareModel):
 
 
 class Contract(TenantAwareModel):
-    driver = models.ForeignKey(Driver, related_name="contract", on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, related_name="contratChauffeur", on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, related_name="contratVoiture", on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     expect_daily_revenue = models.IntegerField(default=0)
     holiday_expect_revenu = models.IntegerField(default=0)
-    rest_days = models.ManyToManyField('core.DayOfTheWeek', related_name='contracts')
+    rest_days = models.ManyToManyField('core.DayOfTheWeek', related_name='jours')
 
     class Meta:
         verbose_name = "Contract"
@@ -82,7 +82,7 @@ class OutageReason(models.Model):
 
 
 class Insurance(TenantAwareModel):
-    car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, related_name="voitureAssurance", on_delete=models.CASCADE)
     insurance_company = models.CharField(max_length=100)
     due_date = models.DateTimeField(auto_now=True)
     monthly_amount = models.CharField(max_length=100)
@@ -95,8 +95,8 @@ class Insurance(TenantAwareModel):
 
 
 class Outages(Expense):
-    car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
-    driver = models.ForeignKey(Driver, related_name="contract", on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, related_name="panneVoiture", on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, related_name="panneChauffeur", on_delete=models.CASCADE)
     reason = models.ForeignKey(OutageReason, related_name="motifPanne", on_delete=models.CASCADE)
     location = models.CharField(max_length=100)
     is_okay = models.BooleanField()
@@ -107,7 +107,7 @@ class Outages(Expense):
 
 
 class OilChange(Expense):
-    car = models.ForeignKey(Car, related_name="contract", on_delete=models.CASCADE)
+    car = models.ForeignKey(Car, related_name="voitureVidange", on_delete=models.CASCADE)
     OilType = models.CharField(max_length=100)
     service_center = models.CharField(max_length=100)
     date_OilChange = models.DateTimeField(auto_now_add=True)
