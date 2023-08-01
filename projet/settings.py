@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 	'tenant',
 	'core',
 	'fleet_app',
+	'finance_app',
 
 	# Packages
 	'django_filters',
