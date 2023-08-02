@@ -14,11 +14,11 @@ def driverGestion(request):
     data = {
         'drivers': fleet_models.Driver.objects.filter(statut=True)
     }
-    return render(request, 'pages/fleet/driverGestion.html', data)
+    return render(request, 'pages/tenant/fleet/driverGestion.html', data)
 
 
 def contratGestion(request):
     data = {
         'contrats': fleet_models.Contract.objects.filter(statut=True)
     }
-    return render(request, 'pages/fleet/contractGestion.html', data)
+    return render(request, 'pages/tenant/fleet/contractGestion.html', data)
