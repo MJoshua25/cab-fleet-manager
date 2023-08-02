@@ -1,0 +1,93 @@
+{% extends 'bases/tenant/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block tenant_content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+       <hr class="my-5" />
+   <h5>Détails de voiture</h5>
+
+              <hr class="my-5" />
+
+              <!-- Responsive Datatable -->
+              <form id="addNewVehiculeForm" class="row g-3">
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalCarVehicule">Modèle</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressFirstName"
+                    name="model"
+                    class="form-control"
+                    placeholder="{{ object.model }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressLastName">Marque</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressLastName"
+                    name="brand"
+                    class="form-control"
+                    placeholder="{{ object.brand }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressLandmark">Matricule</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressLandmark"
+                    name="matriculation"
+                    class="form-control"
+                    placeholder="{{ object.matriculation }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressCity">Couleur</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressCity"
+                    name="color"
+                    class="form-control"
+                    placeholder="{{ object.color }}" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="modalAddressCity">En service</label>
+                    <input
+                      type="text"
+                      disabled
+                      id="modalAddressCity"
+                      name="on_service"
+                      class="form-control"
+                      placeholder="{{ object.on_service }}" />
+                  </div>
+
+
+              </form>
+              <!--/ Responsive Datatable -->
+  </div>
+
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}
