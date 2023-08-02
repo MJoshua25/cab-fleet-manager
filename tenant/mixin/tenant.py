@@ -39,5 +39,4 @@ class TenantAwareViewMixin(ContextMixin):
 		context = super().get_context_data(**kwargs)
 		# Ajouter les données que vous souhaitez au contexte ici
 		context['unique_domain'] = self.tenant.unique_domain
-		print(self.tenant.unique_domain)
 		return context

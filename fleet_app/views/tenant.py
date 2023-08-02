@@ -7,6 +7,11 @@ from tenant import models as tenant_models
 from django.db import transaction
 from django.utils import timezone
 
+from typing import TYPE_CHECKING, Union
+
+if TYPE_CHECKING:
+    from tenant.models import Tenant
+
 
 class CarListView(TenantAwareViewMixin, ListView):
     template_name = 'pages/tenant/fleet/car_list.html'
@@ -25,27 +30,22 @@ class CarDetailView(TenantAwareViewMixin, DetailView):
         return context
 
 
-def add_vehicule(request: HttpRequest) -> HttpResponse:
-    tenant = request.user.profile.tenant
+def add_vehicule(request: HttpRequest, tenant: str) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
     if request.method == "POST":
         model = request.POST.get('model')
         brand = request.POST.get('brand')
         matriculation = request.POST.get('matriculation')
         color = request.POST.get('color')
-        act_tenant = tenant_models.Tenant(
-            name=request.tenant.name,
-            unique_domain=request.tenant.unique_domain
-        )
-        create = fleet_models.Car(
+        car = fleet_models.Car(
             model=model,
             brand=brand,
             matriculation=matriculation,
             color=color,
-            on_service=True
+            on_service=True,
+            tenant=tenant
         )
-        with transaction.atomic():
-            act_tenant.save()
-            create.save()
+        car.save()
 
         return redirect('core:tenant:fleet:car_list', tenant=tenant.unique_domain)
     else:

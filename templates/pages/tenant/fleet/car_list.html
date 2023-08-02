@@ -71,7 +71,7 @@
                         <div class="text-center mb-4">
                           <h3 class="address-title mb-2">Ajouter un véhicule</h3>
                         </div>
-                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:add_tenant_vehicule' request.user.profile.tenant %}">
+                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:add_tenant_vehicule' tenant=unique_domain %}">
                             {% csrf_token %}
                           <div class="col-12 col-md-6">
                             <label class="form-label" for="modalCarVehicule">Modèle</label>
