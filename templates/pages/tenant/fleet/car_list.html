@@ -27,19 +27,24 @@
                       <tr>
                         <th>Modèle</th>
                         <th>Marque</th>
-                        <th>Matriculation</th>
+                        <th>Matricule</th>
                         <th>Couleur</th>
                         <th>En service</th>
                         <th>Action</th>
                     </thead>
+                      {% for car in object_list %}
                       <tr>
-                          <td>C450</td>
-                          <td>Mercédes</td>
-                          <td>1438LX01</td>
-                          <td>Noir</td>
-                          <td>Oui</td>
+                          <td>{{ car.model }}</td>
+                          <td>{{ car.brand }}</td>
+                          <td>{{ car.matriculation }}</td>
+                          <td>{{ car.color }}</td>
+                          {% if car.on_service %}
+                              <td> Oui </td>
+                          {% else %}
+                              <td>Non</td>
+                          {% endif %}
                           <td>
-                              <a href="" style="color: gray" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:fleet:car-detail' car.id  %}" style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
                               ></a>
                               <a href="" style="color: blue" class="dropdown-notifications-archive"
@@ -50,6 +55,7 @@
                               ></a>
                           </td>
                       </tr>
+                      {% endfor %}
                   </table>
                 </div>
               </div>
@@ -65,8 +71,8 @@
                         <div class="text-center mb-4">
                           <h3 class="address-title mb-2">Ajouter un véhicule</h3>
                         </div>
-                        <form id="addNewVehiculeForm" class="row g-3">
-
+                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:add_tenant_vehicule' request.user.profile.tenant %}">
+                            {% csrf_token %}
                           <div class="col-12 col-md-6">
                             <label class="form-label" for="modalCarVehicule">Modèle</label>
                             <input
@@ -105,9 +111,9 @@
                           </div>
                           <div class="col-12 col-md-6">
                             <label class="switch">
-                              <input type="checkbox" name="on_service"class="switch-input" />
+                              <input type="checkbox" name="on_service" class="switch-input" />
                               <span class="switch-toggle-slider">
-                                <span class="switch-on"></span>
+                                <span class="switch-on" value="{{ on_service.id }}"></span>
                                 <span class="switch-off"></span>
                               </span>
                               <span class="switch-label">En service</span>
