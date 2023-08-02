@@ -1,1 +1,3 @@
-from .tenant import urlpatterns
+from . import tenant
+
+urlpatterns = tenant.urlpatterns
