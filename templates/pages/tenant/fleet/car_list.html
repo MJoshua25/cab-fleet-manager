@@ -44,7 +44,7 @@
                               <td>Non</td>
                           {% endif %}
                           <td>
-                              <a href="{% url 'core:tenant:fleet:car-detail' car.id  %}" style="color: gray" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:fleet:car_detail' tenant=unique_domain pk=car.id  %}" style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
                               ></a>
                               <a href="" style="color: blue" class="dropdown-notifications-archive"

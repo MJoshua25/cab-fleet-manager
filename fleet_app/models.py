@@ -2,6 +2,7 @@ from django.db import models
 
 from core.fields import DayOfTheWeekField
 from tenant.models import TenantAwareModel
+from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from finance_app.models import Expense
 
@@ -21,6 +22,7 @@ class FleetUser(TenantAwareModel):
 
 
 class Car(TenantAwareModel):
+    name_slug = AutoSlugField(populate_from='model', unique_with=['id', 'date_add'])
     model = models.CharField(max_length=50)
     brand = models.CharField(max_length=50)
     matriculation = models.CharField(max_length=50)
