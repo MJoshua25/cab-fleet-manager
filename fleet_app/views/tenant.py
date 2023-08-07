@@ -88,6 +88,14 @@ def update_vehicule(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
 
+def delete_vehicule(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    tenant = tenant
+    car = fleet_models.Car.objects.filter(statut=True, id=type_id)[:1].get()
+    car.delete()
+    return redirect('core:tenant:fleet:car_list', tenant=tenant.unique_domain)
+
+
 class DriverListView(TenantAwareViewMixin, ListView):
     template_name = 'pages/tenant/fleet/driver_list.html'
 
