@@ -37,12 +37,17 @@ def add_vehicule(request: HttpRequest, tenant: str) -> HttpResponse:
         brand = request.POST.get('brand')
         matriculation = request.POST.get('matriculation')
         color = request.POST.get('color')
+        on_service = request.POST.get('on_service')
+        if on_service == 'on':
+            on_service = True
+        else:
+            on_service = False
         car = fleet_models.Car(
             model=model,
             brand=brand,
             matriculation=matriculation,
             color=color,
-            on_service=True,
+            on_service=True if on_service == 'on' else on_service != 'on',
             tenant=tenant
         )
         car.save()
