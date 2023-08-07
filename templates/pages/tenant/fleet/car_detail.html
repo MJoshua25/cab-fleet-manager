@@ -67,7 +67,11 @@
                       id="modalAddressCity"
                       name="on_service"
                       class="form-control"
-                      placeholder="{{ object.on_service }}" />
+                      {% if car.on_service %}
+                      placeholder="Oui"
+                      {% else %}
+                      placeholder="Non"
+                        {% endif %}/>
                   </div>
 
 
