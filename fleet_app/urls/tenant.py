@@ -9,5 +9,6 @@ urlpatterns = [
 	path('vehicule/ajout_vehicule', tenant.add_vehicule, name='add_tenant_vehicule'),
 	path('vehicule/<int:pk>', tenant.CarDetailView.as_view(), name='car_detail'),
 	path('vehicule/modif_vehicule/<int:pk>', tenant.CarUpdateView.as_view(), name='car_update'),
-	path('vehicule/modifier_vehicule/<int:type_id>', tenant.update_vehicule, name='update_tenant_vehicule')
+	path('vehicule/modifier_vehicule/<int:type_id>', tenant.update_vehicule, name='update_tenant_vehicule'),
+	path('vehicule/supprimer_vehicule/<int:type_id>', tenant.delete_vehicule, name='delete_tenant_vehicule')
 ]
