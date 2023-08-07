@@ -84,7 +84,7 @@ def update_vehicule(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
             car.on_service = True
         else:
             car.on_service = False
-        print(car.on_service)
+        print(car)
         tenant = tenant
         car.save()
 

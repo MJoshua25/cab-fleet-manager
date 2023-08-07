@@ -35,7 +35,7 @@ class Car(TenantAwareModel):
         unique_together = ("tenant", "matriculation")
 
     def __str__(self):
-        return self.matriculation
+        return f"{self.model} {self.matriculation}"
 
 
 class Driver(TenantAwareModel):
