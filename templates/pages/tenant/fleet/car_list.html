@@ -50,7 +50,7 @@
                               <a href="{% url 'core:tenant:fleet:car_update' tenant=unique_domain pk=car.id  %}" style="color: blue" class="dropdown-notifications-archive"
                                 ><span class="ti ti-edit-circle"></span
                               ></a>
-                              <a href="" style="color: red" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:fleet:delete_tenant_vehicule' tenant=unique_domain type_id=car.id  %}" style="color: red" class="dropdown-notifications-archive"
                                 ><span class="ti ti-trash"></span
                               ></a>
                           </td>
