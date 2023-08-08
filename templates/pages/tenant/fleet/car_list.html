@@ -12,6 +12,12 @@
   <div class="container-xxl flex-grow-1 container-p-y">
        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
        <hr class="my-5" />
+      <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewVehicule">
+         <div style="align-items: center;">
+            <i class="mb-3 ti ti-plus">Ajouter un véhicule</i>
+         </div>
+      </button>
+      <br> <br>
        <!-- Responsive Datatable -->
        <div class="card">
                 <h5 class="card-header">Gestion des voitures</h5>
@@ -21,34 +27,117 @@
                       <tr>
                         <th>Modèle</th>
                         <th>Marque</th>
-                        <th>Matriculation</th>
+                        <th>Matricule</th>
                         <th>Couleur</th>
                         <th>En service</th>
                         <th>Action</th>
                     </thead>
+                      {% for car in object_list %}
                       <tr>
-                          <td>C450</td>
-                          <td>Mercédes</td>
-                          <td>1438LX01</td>
-                          <td>Noir</td>
-                          <td>Oui</td>
+                          <td>{{ car.model }}</td>
+                          <td>{{ car.brand }}</td>
+                          <td>{{ car.matriculation }}</td>
+                          <td>{{ car.color }}</td>
+                          {% if car.on_service %}
+                              <td> Oui </td>
+                          {% else %}
+                              <td>Non</td>
+                          {% endif %}
                           <td>
-                              <a href="" style="color: gray" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:fleet:car_detail' tenant=unique_domain pk=car.id  %}" style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
                               ></a>
-                              <a href="" style="color: blue" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:fleet:car_update' tenant=unique_domain pk=car.id  %}" style="color: blue" class="dropdown-notifications-archive"
                                 ><span class="ti ti-edit-circle"></span
                               ></a>
-                              <a href="" style="color: red" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:fleet:delete_tenant_vehicule' tenant=unique_domain type_id=car.id  %}" style="color: red" class="dropdown-notifications-archive"
                                 ><span class="ti ti-trash"></span
                               ></a>
                           </td>
                       </tr>
+                      {% endfor %}
                   </table>
                 </div>
               </div>
               <!--/ Responsive Datatable -->
-            </div>
+       </div>
+
+                <!-- Add New vehicule Modal -->
+                <div class="modal fade" id="addNewVehicule" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+                    <div class="modal-content p-3 p-md-5">
+                      <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                          <h3 class="address-title mb-2">Ajouter un véhicule</h3>
+                        </div>
+                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:add_tenant_vehicule' tenant=unique_domain %}">
+                            {% csrf_token %}
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalCarVehicule">Modèle</label>
+                            <input
+                              type="text"
+                              id="modalAddressFirstName"
+                              name="model"
+                              class="form-control"
+                              placeholder="A1 ALLSTREET" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Marque</label>
+                            <input
+                              type="text"
+                              id="modalAddressLastName"
+                              name="brand"
+                              class="form-control"
+                              placeholder="Audi" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Matricule</label>
+                            <input
+                              type="text"
+                              id="modalAddressLandmark"
+                              name="matriculation"
+                              class="form-control"
+                              placeholder="1345GA01" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressCity">Couleur</label>
+                            <input
+                              type="text"
+                              id="modalAddressCity"
+                              name="color"
+                              class="form-control"
+                              placeholder="Rouge" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="switch">
+                              <input type="checkbox" name="on_service" class="switch-input" />
+                              <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                              </span>
+                              <span class="switch-label">En service</span>
+                            </label>
+                          </div>
+
+                          <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Ajouter</button>
+                            <button
+                              type="reset"
+                              class="btn btn-label-secondary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                              Annuler
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--/ Add New vehicule -->
+
+
  {% endblock %}
 
 
