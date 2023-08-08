@@ -13,7 +13,6 @@ class TenantAwareViewMixin(ContextMixin):
 
 	def dispatch(self, request, *args, **kwargs):
 		# Vérifier si l'utilisateur est connecté
-		print(request.user, self.request.user, request.user.is_authenticated)
 		if not request.user.is_authenticated:
 			return redirect('core:login')
 
@@ -23,7 +22,6 @@ class TenantAwareViewMixin(ContextMixin):
 			return redirect('core:home')
 
 		self.tenant: 'Tenant' = apps.get_model('tenant', 'Tenant').objects.filter(unique_domain=tenant).first()
-		print(self.request.user.username)
 
 		# Vérifier si le tenant existe, sinon rediriger vers une autre vue
 		if not self.tenant:
