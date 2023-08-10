@@ -1,0 +1,107 @@
+{% extends 'bases/tenant/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block tenant_content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+       <hr class="my-5" />
+   <h5>Modifier ce contrat </h5>
+
+              <hr class="my-5" />
+
+              <!-- Responsive Datatable -->
+              <form id="updateContractForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:update_tenant_vehicule' tenant=unique_domain type_id=object.id %}">
+                  {% csrf_token %}
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalCarVehicule">Conducteur</label>
+                  <select name="driver" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                     {% for driver in drivers %}
+                         <option value="{{ driver.id }}">{{ driver.last_name }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressLastName">Vehicule</label>
+                   <select name="driver" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                     {% for car in cars %}
+                         <option value="{{ car.id }}">{{ car.matriculation }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressLandmark">Revenu journalier</label>
+                  <input
+                    type="text"
+                    id="modalAddressLandmark"
+                    name="expect_daily_revenue"
+                    class="form-control"
+                    value="{{ object.expect_daily_revenue }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressCity">Revenu attendu en vacances</label>
+                  <input
+                    type="text"
+                    id="modalAddressCity"
+                    name="holiday_expect_revenu"
+                    class="form-control"
+                    value="{{ object.holiday_expect_revenu }}" />
+                </div>
+               <div class="col-12 col-md-6">
+                            <label class="switch">
+                              <input type="checkbox" name="is_active" class="switch-input" />
+                              <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                              </span>
+                              <span class="switch-label">Actif</span>
+                            </label>
+                          </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressCity">Jour de repos</label>
+                  <input
+                    type="text"
+                    id="modalAddressCity"
+                    name="rest_days"
+                    class="form-control"
+                    value="{{ object.rest_days }}" />
+                </div>
+
+            <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Modifier</button>
+                            <button
+                              type="reset"
+                              class="btn btn-label-secondary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                              Annuler
+                            </button>
+                          </div>
+
+              </form>
+              <!--/ Responsive Datatable -->
+  </div>
+
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}
