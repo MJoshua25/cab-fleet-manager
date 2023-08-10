@@ -2,29 +2,31 @@
 {% load static %}
 
 {% block typeJs %}
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
- {% endblock %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}"/>
+    <link rel="stylesheet"
+          href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}"/>
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}"/>
+{% endblock %}
 
-    <!-- Content -->
- {% block tenant_content %}
-  <div class="container-xxl flex-grow-1 container-p-y">
-       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de la flotte /</span> Gestion des contrats </h4>
-       <hr class="my-5" />
-  <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewContract">
-         <div style="align-items: center;">
-            <i class="mb-3 ti ti-plus">Ajouter un contrat</i>
-         </div>
-      </button>
-      <br> <br>
-       <!-- Responsive Datatable -->
-       <div class="card">
-                <h5 class="card-header">Gestion des contrats </h5>
-                <div class="card-datatable table-responsive">
-                  <table class="dt-responsive table">
+<!-- Content -->
+{% block tenant_content %}
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de la flotte /</span> Gestion des
+            contrats </h4>
+        <hr class="my-5"/>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewContract">
+            <div style="align-items: center;">
+                <i class="mb-3 ti ti-plus">Ajouter un contrat</i>
+            </div>
+        </button>
+        <br> <br>
+        <!-- Responsive Datatable -->
+        <div class="card">
+            <h5 class="card-header">Gestion des contrats </h5>
+            <div class="card-datatable table-responsive">
+                <table class="dt-responsive table">
                     <thead>
-                      <tr>
+                    <tr>
                         <th>Conducteur</th>
                         <th>Voiture</th>
                         <th>Actif</th>
@@ -34,129 +36,137 @@
                         <th>Action</th>
 
                     </thead>
-                      {% for contract in object_list %}
-                      <tr>
-                          <td>{{ contract.driver.last_name }}</td>
-                          <td>{{ contract.car.matriculation }}</td>
-                           {% if contract.is_active %}
-                              <td> Oui </td>
-                          {% else %}
-                              <td>Non</td>
-                          {% endif %}
-                          <td>{{ contract.expect_daily_revenue }}</td>
-                          <td>{{ contract.holiday_expect_revenu }}</td>
-                          <td>{{ contract.rest_days.day.id }}</td>
-                          <td>
-                              <a href="{% url 'core:tenant:fleet:contract_detail' tenant=unique_domain pk=contract.id  %}" style="color: gray" class="dropdown-notifications-archive"
+                    {% for contract in object_list %}
+                        <tr>
+                            <td>{{ contract.driver.last_name }}</td>
+                            <td>{{ contract.car.matriculation }}</td>
+                            {% if contract.is_active %}
+                                <td> Oui</td>
+                            {% else %}
+                                <td>Non</td>
+                            {% endif %}
+                            <td>{{ contract.expect_daily_revenue }}</td>
+                            <td>{{ contract.holiday_expect_revenu }}</td>
+                            <td>{{ contract.rest_days.day.id }}</td>
+                            <td>
+                                <a href="{% url 'core:tenant:fleet:contract_detail' tenant=unique_domain pk=contract.id %}"
+                                   style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
-                              ></a>
-                              <a href="{% url 'core:tenant:fleet:contract_update' tenant=unique_domain pk=contract.id  %}" style="color: blue" class="dropdown-notifications-archive"
+                                ></a>
+                                <a href="{% url 'core:tenant:fleet:contract_update' tenant=unique_domain pk=contract.id %}"
+                                   style="color: blue" class="dropdown-notifications-archive"
                                 ><span class="ti ti-edit-circle"></span
-                              ></a>
-                              <a href="{% url 'core:tenant:fleet:delete_tenant_contract' tenant=unique_domain type_id=contract.id  %}" style="color: red" class="dropdown-notifications-archive"
+                                ></a>
+                                <a href="{% url 'core:tenant:fleet:delete_tenant_contract' tenant=unique_domain type_id=contract.id %}"
+                                   style="color: red" class="dropdown-notifications-archive"
                                 ><span class="ti ti-trash"></span
-                              ></a>
-                          </td>
-                      </tr>
-                      {% endfor %}
-                  </table>
-                </div>
-              </div>
-              <!--/ Responsive Datatable -->
+                                ></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
+        </div>
+        <!--/ Responsive Datatable -->
+    </div>
 
-                <!-- Add New contract Modal -->
-                <div class="modal fade" id="addNewContract" tabindex="-1" aria-hidden="true">
-                  <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
-                    <div class="modal-content p-3 p-md-5">
-                      <div class="modal-body">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="text-center mb-4">
-                          <h3 class="address-title mb-2">Ajouter un contrat</h3>
-                        </div>
-                        <form id="addNewContractForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:add_tenant_contract' tenant=unique_domain %}">
-                            {% csrf_token %}
-                          <div class="col-12 col-md-6">
+    <!-- Add New contract Modal -->
+    <div class="modal fade" id="addNewContract" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+            <div class="modal-content p-3 p-md-5">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center mb-4">
+                        <h3 class="address-title mb-2">Ajouter un contrat</h3>
+                    </div>
+                    <form id="addNewContractForm" method="post" class="row g-3"
+                          action="{% url 'core:tenant:fleet:add_tenant_contract' tenant=unique_domain %}">
+                        {% csrf_token %}
+                        <div class="col-12 col-md-6">
                             <label class="form-label" for="modalCarVehicule">Conducteur</label>
-                            <select name="driver" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
-                              {% for driver in drivers %}
-                                <option value="{{ driver.id }}">{{ driver.last_name }}</option>
+                            <select name="driver" class="form-select" id="exampleFormControlSelect1"
+                                    aria-label="Default select example">
+                                {% for driver in drivers %}
+                                    <option value="{{ driver.id }}">{{ driver.last_name }}</option>
                                 {% endfor %}
                             </select>
-                          </div>
-                          <div class="col-12 col-md-6">
+                        </div>
+                        <div class="col-12 col-md-6">
                             <label class="form-label" for="modalAddressLastName">Véhicule</label>
-                            <select name="car" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
-                              {% for car in cars %}
-                                <option value="{{ car.id }}">{{ car.matriculation }}</option>
+                            <select name="car" class="form-select" id="exampleFormControlSelect1"
+                                    aria-label="Default select example">
+                                {% for car in cars %}
+                                    <option value="{{ car.id }}">{{ car.matriculation }}</option>
                                 {% endfor %}
                             </select>
-                          </div>
-                          <div class="col-12 col-md-6">
+                        </div>
+                        <div class="col-12 col-md-6">
                             <label class="form-label" for="modalAddressLandmark">Revenu journalier</label>
                             <input
-                              type="number"
-                              id="modalAddressLandmark"
-                              name="expect_daily_revenue"
-                              class="form-control"
-                              placeholder="25000" />
-                          </div>
-                          <div class="col-12 col-md-6">
+                                    type="number"
+                                    id="modalAddressLandmark"
+                                    name="expect_daily_revenue"
+                                    class="form-control"
+                                    placeholder="25000"/>
+                        </div>
+                        <div class="col-12 col-md-6">
                             <label class="form-label" for="modalAddressCity">Revenu attendu en vacances</label>
                             <input
-                              type="number"
-                              id="modalAddressCity"
-                              name="holiday_expect_revenu"
-                              class="form-control"
-                              placeholder="20000" />
-                          </div>
-                          <div class="col-12 col-md-6">
+                                    type="number"
+                                    id="modalAddressCity"
+                                    name="holiday_expect_revenu"
+                                    class="form-control"
+                                    placeholder="20000"/>
+                        </div>
+                        <div class="col-12 col-md-6">
                             <label class="switch">
-                              <input type="checkbox" name="is_active" class="switch-input" />
-                              <span class="switch-toggle-slider">
+                                <input type="checkbox" name="is_active" class="switch-input"/>
+                                <span class="switch-toggle-slider">
                                 <span class="switch-on"></span>
                                 <span class="switch-off"></span>
                               </span>
-                              <span class="switch-label">Actif</span>
+                                <span class="switch-label">Actif</span>
                             </label>
-                          </div>
-                          <div class="col-12 col-md-6">
-                              <label class="form-label" for="modalAddressCity">Jour de repos</label>
-                              <select name="rest_days" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example" multiple>
-                              {% for day in week %}
-                                <option value="{{ day.id }}">{{ day.day }}</option>
-                                {% endfor %}
-                            </select>
-                </div>
-                          <div class="col-12 text-center">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <small class="text-light fw-medium d-block">Jours</small>
+                            {% for day in week %}
+                            <div class="form-check form-check-primary mt-3">
+                                <input class="form-check-input" type="checkbox" value="{{ day.id }}" id="day_{{ day.id }}"
+                                       />
+                                <label class="form-check-label" for="day_{{ day.id }}">{{ day.in_str }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary me-sm-3 me-1">Ajouter</button>
                             <button
-                              type="reset"
-                              class="btn btn-label-secondary"
-                              data-bs-dismiss="modal"
-                              aria-label="Close">
-                              Annuler
+                                    type="reset"
+                                    class="btn btn-label-secondary"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                Annuler
                             </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
+                        </div>
+                    </form>
                 </div>
-                <!--/ Add New contract -->
- {% endblock %}
+            </div>
+        </div>
+    </div>
+    <!--/ Add New contract -->
+{% endblock %}
 
 
- {% block befMain %}
+{% block befMain %}
     <!-- Vendors JS -->
     <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
     <!-- Flat Picker -->
     <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
     <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
- {% endblock %}
+{% endblock %}
 
 
-  {% block afMain %}
+{% block afMain %}
     <!-- Page JS -->
     <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
-  {% endblock %}
+{% endblock %}
