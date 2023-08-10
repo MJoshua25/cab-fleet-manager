@@ -2,6 +2,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 from fleet_app import models as fleet_models
+from core import models as core_models
 from tenant.mixin import TenantAwareViewMixin
 from tenant import models as tenant_models
 from django.db import transaction
@@ -195,3 +196,106 @@ class ContractListView(TenantAwareViewMixin, ListView):
 
     def get_queryset(self):
         return fleet_models.Contract.objects.filter(statut=True, tenant=self.tenant)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        return context
+
+
+class ContractDetailView(TenantAwareViewMixin, DetailView):
+    model = fleet_models.Contract
+    template_name = 'pages/tenant/fleet/contract_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        return context
+
+
+def add_contract(request: HttpRequest, tenant: str) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    if request.method == "POST":
+        driver = int(request.POST.get('driver'))
+        car = int(request.POST.get('car'))
+        expect_daily_revenue = request.POST.get('expect_daily_revenue')
+        holiday_expect_revenu = request.POST.get('holiday_expect_revenu')
+        rest_days = request.POST.getlist('rest_days')
+        rest_days = [int(i) for i in rest_days]
+
+        print('Jours', rest_days)
+        is_active = request.POST.get('is_active')
+        if is_active == 'on':
+            is_active = True
+        else:
+            is_active = False
+
+        contrat = fleet_models.Contract(
+            driver_id=driver,
+            car_id=car,
+            expect_daily_revenue=expect_daily_revenue,
+            holiday_expect_revenu=holiday_expect_revenu,
+            rest_days=rest_days,
+            is_active=True if is_active == 'on' else is_active != 'on',
+            tenant=tenant
+        )
+        contrat.save()
+
+        return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
+    else:
+        return redirect("core:tenant", tenant=tenant.unique_domain)
+
+
+class ContractUpdateView(TenantAwareViewMixin, DetailView):
+    model = fleet_models.Contract
+    template_name = 'pages/tenant/fleet/contract_modif.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        return context
+
+
+def update_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    u_tenant: 'Tenant' = request.user.profile.tenant
+    tenant = u_tenant
+
+    if request.method != "POST":
+        return redirect("core:tenant", tenant=tenant.unique_domain)
+
+    # Getting datas from the form
+    driver = int(request.POST.get('driver'))
+    car = int(request.POST.get('car'))
+    expect_daily_revenue = request.POST.get('expect_daily_revenue')
+    holiday_expect_revenu = request.POST.get('holiday_expect_revenu')
+    rest_days = request.POST.get('rest_days')
+    is_active = request.POST.get('on_service')
+
+    # Updating the corresponding car object
+    contract = fleet_models.Contract.objects.filter(statut=True, id=type_id)[:1].get()
+    contract.driver_id = driver
+    contract.car_id = car
+    contract.expect_daily_revenue = expect_daily_revenue
+    contract.holiday_expect_revenu = holiday_expect_revenu
+    contract.rest_days = rest_days
+    if is_active == 'on':
+        contract.is_active = True
+    else:
+        contract.is_active = False
+    contract.save()
+
+    return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
+
+
+def delete_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    tenant = tenant
+    contract = fleet_models.Contract.objects.filter(statut=True, id=type_id)[:1].get()
+    contract.delete()
+    return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
