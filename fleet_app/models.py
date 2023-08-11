@@ -132,6 +132,7 @@ class OilChange(Expense):
     OilType = models.CharField(max_length=100)
     service_center = models.CharField(max_length=100)
     date_OilChange = models.DateTimeField(auto_now_add=True)
+    date_next_oil_change = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "OilChange"
