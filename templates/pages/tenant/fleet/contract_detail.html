@@ -75,13 +75,17 @@
                   </div>
                 <div class="col-12 col-md-6">
                   <label class="form-label" for="modalAddressCity">Jour de repos</label>
+                 {% for a in object.rest_days.all %}
                   <input
                     type="text"
                     disabled
                     id="modalAddressCity"
                     name="rest_days"
                     class="form-control"
-                    placeholder="{{ object.rest_days }}" />
+
+                    placeholder="{{ a.in_str }}"
+                 />
+                     {% endfor %}
                 </div>
 
               </form>
