@@ -17,7 +17,7 @@
               <hr class="my-5" />
 
               <!-- Responsive Datatable -->
-              <form id="updateContractForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:update_tenant_vehicule' tenant=unique_domain type_id=object.id %}">
+              <form id="updateContractForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:update_tenant_contract' tenant=unique_domain type_id=object.id %}">
                   {% csrf_token %}
 
                 <div class="col-12 col-md-6">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-12 col-md-6">
                   <label class="form-label" for="modalAddressLastName">Vehicule</label>
-                   <select name="driver" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                   <select name="car" class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
                      {% for car in cars %}
                          <option value="{{ car.id }}">{{ car.matriculation }}</option>
                       {% endfor %}
@@ -64,15 +64,16 @@
                               <span class="switch-label">Actif</span>
                             </label>
                           </div>
-                <div class="col-12 col-md-6">
-                  <label class="form-label" for="modalAddressCity">Jour de repos</label>
-                  <input
-                    type="text"
-                    id="modalAddressCity"
-                    name="rest_days"
-                    class="form-control"
-                    value="{{ object.rest_days }}" />
-                </div>
+               <div class="col-12 col-md-6">
+                            <small class="text-light fw-medium d-block">Jours</small>
+                            {% for day in week %}
+                            <div class="form-check form-check-primary mt-3">
+                                <input class="form-check-input" name="rest_days" type="checkbox" value="{{ day.id }}" id="day_{{ day.id }}"
+                                       />
+                                <label class="form-check-label" for="day_{{ day.id }}">{{ day.in_str }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
 
             <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary me-sm-3 me-1">Modifier</button>
