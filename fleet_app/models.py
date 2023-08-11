@@ -5,6 +5,7 @@ from tenant.models import TenantAwareModel
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from finance_app.models import Expense
+from django.utils import timezone
 
 
 # Create your models here.
@@ -94,6 +95,24 @@ class Insurance(TenantAwareModel):
     class Meta:
         verbose_name = "Insurance"
         verbose_name_plural = "Insurances"
+
+    def __str__(self):
+        return f"{self.car} {self.insurance_company}"
+
+
+class InsurancePayment(TenantAwareModel):
+    amount = models.IntegerField(default=0)
+    contract = models.ForeignKey(Contract, related_name="InsurancePayment", on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=100, blank=True, null=True)
+    date_payment = models.DateField(default=timezone.now)
+    is_sold_out = models.BooleanField(default=False)  # Je comprend pas trop ce champs
+
+    class Meta:
+        verbose_name = "InsurancePayment"
+        verbose_name_plural = "InsurancePayments"
+
+    def __str__(self):
+        return f"{self.contract} {self.payment_method}"
 
 
 class Outages(Expense):
