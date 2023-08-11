@@ -226,8 +226,7 @@ def add_contract(request: HttpRequest, tenant: str) -> HttpResponse:
         holiday_expect_revenu = request.POST.get('holiday_expect_revenu')
         rest_days = request.POST.getlist('rest_days')
         rest_days = [int(i) for i in rest_days]
-
-        print('Jours', rest_days)
+        print("[] :", rest_days)
         is_active = request.POST.get('is_active')
         if is_active == 'on':
             is_active = True
@@ -239,10 +238,12 @@ def add_contract(request: HttpRequest, tenant: str) -> HttpResponse:
             car_id=car,
             expect_daily_revenue=expect_daily_revenue,
             holiday_expect_revenu=holiday_expect_revenu,
-            rest_days=rest_days,
             is_active=True if is_active == 'on' else is_active != 'on',
             tenant=tenant
         )
+        contrat.save()
+        for day in rest_days:
+            contrat.rest_days.add(day)
         contrat.save()
 
         return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
@@ -270,12 +271,14 @@ def update_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
     # Getting datas from the form
-    driver = int(request.POST.get('driver'))
     car = int(request.POST.get('car'))
+    driver = int(request.POST.get('driver'))
     expect_daily_revenue = request.POST.get('expect_daily_revenue')
     holiday_expect_revenu = request.POST.get('holiday_expect_revenu')
-    rest_days = request.POST.get('rest_days')
-    is_active = request.POST.get('on_service')
+    rest_days = request.POST.getlist('rest_days')
+    rest_days = [int(i) for i in rest_days]
+    print("[] :", rest_days)
+    is_active = request.POST.get('is_active')
 
     # Updating the corresponding car object
     contract = fleet_models.Contract.objects.filter(statut=True, id=type_id)[:1].get()
@@ -283,11 +286,13 @@ def update_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
     contract.car_id = car
     contract.expect_daily_revenue = expect_daily_revenue
     contract.holiday_expect_revenu = holiday_expect_revenu
-    contract.rest_days = rest_days
     if is_active == 'on':
         contract.is_active = True
     else:
         contract.is_active = False
+    contract.save()
+    for day in rest_days:
+        contract.rest_days.add(day)
     contract.save()
 
     return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
