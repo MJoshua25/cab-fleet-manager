@@ -1,7 +1,7 @@
 from django.db import models
 
 from core.fields import DayOfTheWeekField
-from tenant.models import TenantAwareModel
+from tenant.models import TenantAwareModel, StandardModel
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from finance_app.models import Expense
@@ -69,11 +69,9 @@ class Contract(TenantAwareModel):
         return str(self.driver)
 
 
-class OutageReason(models.Model):
+class OutageReason(StandardModel):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    date_add = models.DateTimeField(auto_now_add=True)
-    date_upd = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "OutageReason"
@@ -96,12 +94,12 @@ class Insurance(TenantAwareModel):
         verbose_name_plural = "Insurances"
 
 
-class Outages(Expense):
-    car = models.ForeignKey(Car, related_name="panneVoiture", on_delete=models.CASCADE)
-    driver = models.ForeignKey(Driver, related_name="panneChauffeur", on_delete=models.CASCADE)
-    reason = models.ForeignKey(OutageReason, related_name="motifPanne", on_delete=models.CASCADE)
+class Outage(Expense):
+    car = models.ForeignKey(Car, related_name="outages", on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, related_name="outages", on_delete=models.CASCADE)
+    reason = models.ForeignKey(OutageReason, related_name="outages", on_delete=models.CASCADE)
     location = models.CharField(max_length=100)
-    is_okay = models.BooleanField()
+    is_okay = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Outage"
@@ -110,9 +108,9 @@ class Outages(Expense):
 
 class OilChange(Expense):
     car = models.ForeignKey(Car, related_name="voitureVidange", on_delete=models.CASCADE)
-    OilType = models.CharField(max_length=100)
+    oil_type = models.CharField(max_length=100)
     service_center = models.CharField(max_length=100)
-    date_OilChange = models.DateTimeField(auto_now_add=True)
+    date_oil_change = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "OilChange"
