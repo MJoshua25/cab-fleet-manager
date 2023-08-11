@@ -125,23 +125,22 @@ class InsurancePaymentAdmin(admin.ModelAdmin):
         'date_add',
         'date_upd',
         'tenant',
-        'car',
-        'insurance_company',
-        'due_date',
-        'monthly_amount',
-        'last_payment',
-        'next_date'
+        'amount',
+        'contract',
+        'payment_method',
+        'date_payment',
+        'is_sold_out',
     )
     list_filter = (
         'statut',
         'date_add',
         'date_upd',
         'tenant',
-        'car',
-        'due_date',
-        'monthly_amount',
-        'last_payment',
-        'next_date'
+        'amount',
+        'contract',
+        'payment_method',
+        'date_payment',
+        'is_sold_out'
     )
 
 
