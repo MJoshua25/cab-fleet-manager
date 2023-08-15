@@ -1,0 +1,110 @@
+{% extends 'bases/tenant/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block tenant_content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+       <hr class="my-5" />
+   <h5>Détails de contrat</h5>
+
+              <hr class="my-5" />
+
+              <!-- Responsive Datatable -->
+              <form id="addContractForm" class="row g-3">
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalCarVehicule">Conducteur</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressFirstName"
+                    name="model"
+                    class="form-control"
+                    placeholder="{{ object.driver.last_name }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressLastName">Vehicule</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressLastName"
+                    name="brand"
+                    class="form-control"
+                    placeholder="{{ object.car.matriculation }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressLandmark">Revenu journalier</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressLandmark"
+                    name="matriculation"
+                    class="form-control"
+                    placeholder="{{ object.expect_daily_revenue }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressCity">Revenu attendu en vacances</label>
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressCity"
+                    name="color"
+                    class="form-control"
+                    placeholder="{{ object.holiday_expect_revenu }}" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label" for="modalAddressCity">Actif</label>
+                    <input
+                      type="text"
+                      disabled
+                      id="modalAddressCity"
+                      name="is_active"
+                      class="form-control"
+                      {% if car.is_active %}
+                      placeholder="Oui"
+                      {% else %}
+                      placeholder="Non"
+                        {% endif %}/>
+                  </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label" for="modalAddressCity">Jour de repos</label>
+                 {% for a in object.rest_days.all %}
+                  <input
+                    type="text"
+                    disabled
+                    id="modalAddressCity"
+                    name="rest_days"
+                    class="form-control"
+
+                    placeholder="{{ a.in_str }}"
+                 />
+                     {% endfor %}
+                </div>
+
+              </form>
+              <!--/ Responsive Datatable -->
+  </div>
+
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}

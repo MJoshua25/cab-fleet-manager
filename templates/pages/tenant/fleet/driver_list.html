@@ -12,6 +12,12 @@
   <div class="container-xxl flex-grow-1 container-p-y">
        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de la flotte /</span> Gestion du conducteur</h4>
        <hr class="my-5" />
+      <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewDriver">
+         <div style="align-items: center;">
+            <i class="mb-3 ti ti-plus">Ajouter un conducteur</i>
+         </div>
+      </button>
+      <br> <br>
        <!-- Responsive Datatable -->
        <div class="card">
                 <h5 class="card-header">Gestion du conducteur</h5>
@@ -24,25 +30,101 @@
                         <th>Contact</th>
                         <th>Numéro du permis</th>
                         <th>Permis de conduire</th>
+                        <th>Action</th>
                     </thead>
+                      {% for driver in object_list %}
                       <tr>
-                          <td>C450</td>
-                          <td>Mercédes</td>
-                          <td>1438LX01</td>
-                          <td>Noir</td>
-                          <td>papier.pdf</td>
+                          <td>{{ driver.last_name }}</td>
+                          <td>{{ driver.first_name }}</td>
+                          <td>{{ driver.phone_number }}</td>
+                          <td>{{ driver.license_number }}</td>
+                          <td>{{ driver.driver_license }}</td>
+                          <td>
+                              <a href="{% url 'core:tenant:fleet:driver_detail' tenant=unique_domain pk=driver.id  %}" style="color: gray" class="dropdown-notifications-archive"
+                                ><span class="ti ti-eye"></span
+                              ></a>
+                              <a href="{% url 'core:tenant:fleet:driver_update' tenant=unique_domain pk=driver.id  %}" style="color: blue" class="dropdown-notifications-archive"
+                                ><span class="ti ti-edit-circle"></span
+                              ></a>
+                              <a href="{% url 'core:tenant:fleet:delete_tenant_driver' tenant=unique_domain type_id=driver.id  %}" style="color: red" class="dropdown-notifications-archive"
+                                ><span class="ti ti-trash"></span
+                              ></a>
+                          </td>
                       </tr>
-                      <tr>
-                          <td>C450</td>
-                          <td>Mercédes</td>
-                          <td>1438LX01</td>
-                          <td>Noir</td>
-                          <td>papier.pdf</td>
-                      </tr>
+                      {% endfor %}
                   </table>
                 </div>
               </div>
               <!--/ Responsive Datatable -->
+                <!-- Add New driver Modal -->
+                <div class="modal fade" id="addNewDriver" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+                    <div class="modal-content p-3 p-md-5">
+                      <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                          <h3 class="address-title mb-2">Ajouter un conducteur</h3>
+                        </div>
+                        <form id="addNewVehiculeForm" method="post" enctype="multipart/form-data" class="row g-3" action="{% url 'core:tenant:fleet:add_tenant_driver' tenant=unique_domain %}">
+                            {% csrf_token %}
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalCarVehicule">Nom</label>
+                            <input
+                              type="text"
+                              id="modalAddressFirstName"
+                              name="last_name"
+                              class="form-control"
+                              placeholder="Koné" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Prénoms</label>
+                            <input
+                              type="text"
+                              id="modalAddressLastName"
+                              name="first_name"
+                              class="form-control"
+                              placeholder="Donatien" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Contact</label>
+                            <input
+                              type="text"
+                              id="modalAddressLandmark"
+                              name="phone_number"
+                              class="form-control"
+                              placeholder="0102567844" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressCity">Numéro de permis</label>
+                            <input
+                              type="text"
+                              id="modalAddressCity"
+                              name="license_number"
+                              class="form-control"
+                              placeholder="Rouge" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label for="formFile" class="form-label">Permis de conduire</label>
+                            <input name="driver_license" class="form-control" type="file" id="formFile" />
+                          </div>
+
+                          <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Ajouter</button>
+                            <button
+                              type="reset"
+                              class="btn btn-label-secondary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                              Annuler
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--/ Add New driver -->
+
             </div>
  {% endblock %}
 
