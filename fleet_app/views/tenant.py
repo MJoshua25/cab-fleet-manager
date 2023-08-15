@@ -48,33 +48,6 @@ class CarDetailView(TenantAwareViewMixin, DetailView):
 		return context
 
 
-def add_vehicule(request: HttpRequest, tenant: str) -> HttpResponse:
-	tenant: 'Tenant' = request.user.profile.tenant
-	if request.method == "POST":
-		model = request.POST.get('model')
-		brand = request.POST.get('brand')
-		matriculation = request.POST.get('matriculation')
-		color = request.POST.get('color')
-		on_service = request.POST.get('on_service')
-		if on_service == 'on':
-			on_service = True
-		else:
-			on_service = False
-		car = fleet_models.Car(
-			model=model,
-			brand=brand,
-			matriculation=matriculation,
-			color=color,
-			on_service=True if on_service == 'on' else on_service != 'on',
-			tenant=tenant
-		)
-		car.save()
-
-		return redirect('core:tenant:fleet:car_list', tenant=tenant.unique_domain)
-	else:
-		return redirect("core:tenant", tenant=tenant.unique_domain)
-
-
 class CarUpdateView(TenantAwareViewMixin, DetailView):
 	model = fleet_models.Car
 	template_name = 'pages/tenant/fleet/car_modif.html'
