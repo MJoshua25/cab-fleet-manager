@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from tenant import models as tenant_models
 from fleet_app import models as fleet_models
 from django.db import transaction
+from tenant.decorators import no_tenant_required
 from core import models
 
 from django.contrib.auth import authenticate, login as auth_login
@@ -18,6 +19,7 @@ def index(request: HttpRequest) -> HttpResponse:
 	return render(request, 'pages/index.html', data)
 
 
+@no_tenant_required
 def register(request: HttpRequest) -> HttpResponse:
 	print("started")
 	data = {
@@ -65,6 +67,7 @@ def add_tenant_user(request: HttpRequest) -> HttpResponse:
 		return redirect("core:home")
 
 
+@no_tenant_required
 def login(request):
 	if request.method == 'POST':
 		form = LoginForm(request.POST)
