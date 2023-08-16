@@ -53,14 +53,28 @@
               </li>
             <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                  <i class="menu-icon tf-icons ti ti-car"></i>
+                  <i class="menu-icon tf-icons ti ti-report-money"></i>
                   <div>Gestion des finances</div>
                 </a>
                 <ul class="menu-sub">
                   <li class="menu-item">
-                    <a href="{% url 'core:tenant:fleet:car_list' tenant=unique_domain %}" class="menu-link">
-                      <div>Gestion des assurances</div>
+                     <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-report-money"></i>
+                        <div>Gestion des assurances</div>
                     </a>
+
+                   <ul class="menu-sub" >
+                      <li class="menu-item" style="margin-left: 10%" >
+                        <a href="{% url 'core:tenant:finance:insurance_list' tenant=unique_domain %}" class="menu-link">
+                          <div>Assurances</div>
+                        </a>
+                      </li>
+                      <li class="menu-item" style="margin-left: 10%">
+                        <a href="{% url 'core:tenant:fleet:driver_list' tenant=unique_domain %}" class="menu-link">
+                          <div>Paiements d'assurance</div>
+                        </a>
+                      </li>
+                   </ul>
                   </li>
                   <li class="menu-item">
                     <a href="{% url 'core:tenant:fleet:driver_list' tenant=unique_domain %}" class="menu-link">
