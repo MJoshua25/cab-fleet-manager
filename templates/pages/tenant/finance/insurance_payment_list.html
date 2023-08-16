@@ -1,0 +1,162 @@
+{% extends 'bases/tenant/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block tenant_content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion des finances /</span> Paiement des assurances </h4>
+       <hr class="my-5" />
+      <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewVehicule">
+         <div style="align-items: center;">
+            <i class="mb-3 ti ti-plus">Ajouter un paiement d'assurance </i>
+         </div>
+      </button>
+      <br> <br>
+       <!-- Responsive Datatable -->
+       <div class="card">
+                <h5 class="card-header">Gestion des assurances</h5>
+                <div class="card-datatable table-responsive">
+                  <table class="dt-responsive table">
+                    <thead>
+                      <tr>
+                        <th>Montant</th>
+                        <th>Méthode de paiement</th>
+                        <th>Date de paiement</th>
+                        <th>Assurance</th>
+                        <th>Contrat</th>
+                        <th>Soldé</th>
+                        <th>Action</th>
+                    </thead>
+                      {% for insp in object_list %}
+                      <tr>
+                          <td>{{ expense.amount }}</td>
+                          <td>{{ expense.payment_method }}</td>
+                          <td>{{ expense.date_payment|date:"Y-m-d" }}</td>
+                          <td>{{ insp.insurance.insurance_company }}</td>
+                          <td>{{ insp.contract.driver.driver_license }}</td>
+                          <td>{{ insp.is_sold_out }}</td>
+                          <td>
+                              <a href="{% url 'core:tenant:finance:insurance_payment_detail' tenant=unique_domain pk=insp.id  %}" style="color: gray" class="dropdown-notifications-archive"
+                                ><span class="ti ti-eye"></span
+                              ></a>
+                              <a href="{% url 'core:tenant:finance:insurance_payment_update' tenant=unique_domain pk=insp.id  %}" style="color: blue" class="dropdown-notifications-archive"
+                                ><span class="ti ti-edit-circle"></span
+                              ></a>
+                              <a href="{% url 'core:tenant:finance:delete_tenant_insurance_payment' tenant=unique_domain type_id=insp.id  %}" style="color: red" class="dropdown-notifications-archive"
+                                ><span class="ti ti-trash"></span
+                              ></a>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                  </table>
+                </div>
+              </div>
+              <!--/ Responsive Datatable -->
+       </div>
+
+                <!-- Add New Insurance Modal -->
+                <div class="modal fade" id="addNewVehicule" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+                    <div class="modal-content p-3 p-md-5">
+                      <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                          <h3 class="address-title mb-2">Ajouter un paiement d'assurance</h3>
+                        </div>
+                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:finance:add_tenant_insurance_payment' tenant=unique_domain %}">
+                            {% csrf_token %}
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Montant </label>
+                            <input
+                              type="number"
+                              id="modalAddressLandmark"
+                              name="amount"
+                              class="form-control"
+                              placeholder="12400" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Méthode de paiement</label>
+                            <input
+                              type="text"
+                              id="modalAddressLastName"
+                              name="payment_method"
+                              class="form-control"
+                              placeholder="BNI" />
+                          </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Contrat</label>
+                            <select name="contract" class="form-select" id="exampleFormControlSelect1"
+                                    aria-label="Default select example">
+                                {% for con in contract %}
+                                    <option value="{{ con.id }}">{{ con.driver.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                         </div>
+                         <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Assurance</label>
+                            <select name="insurance" class="form-select" id="exampleFormControlSelect1"
+                                    aria-label="Default select example">
+                                {% for ins in insurance %}
+                                    <option value="{{ ins.id }}">{{ ins.insurance_company }}</option>
+                                {% endfor %}
+                            </select>
+                         </div>
+                         <div class="col-12 col-md-6">
+                            <label class="switch">
+                              <input type="checkbox" name="is_sold_out" class="switch-input" />
+                              <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                              </span>
+                              <span class="switch-label">Soldé</span>
+                            </label>
+                          </div>
+                        <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date de paiement </label>
+                            <div class="col-md-10">
+                              <input class="form-control" name="date_payment" type="datetime-local" value="2021-06-18" id="html5-date-input" />
+                            </div>
+                      </div>
+
+
+                          <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Ajouter</button>
+                            <button
+                              type="reset"
+                              class="btn btn-label-secondary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                              Annuler
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--/ Add New insurance -->
+
+
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}

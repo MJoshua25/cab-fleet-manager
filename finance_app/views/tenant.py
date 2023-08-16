@@ -122,3 +122,122 @@ def delete_insurance(request: HttpRequest, tenant: str, type_id: int) -> HttpRes
     contract.delete()
     return redirect('core:tenant:finance:insurance_list', tenant=tenant.unique_domain)
 
+
+class InsurancePaymentListView(TenantAwareViewMixin, ListView):
+    template_name = 'pages/tenant/finance/insurance_payment_list.html'
+
+    def get_queryset(self):
+        return fleet_models.InsurancePayment.objects.filter(statut=True, tenant=self.tenant)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        context["insurance"] = fleet_models.Insurance.objects.all()
+        context["contract"] = fleet_models.Contract.objects.all()
+        context["expense"] = finance_models.Expense.objects.all()
+        return context
+
+
+class InsurancePaymentDetailView(TenantAwareViewMixin, DetailView):
+    model = fleet_models.InsurancePayment
+    template_name = 'pages/tenant/finance/insurance_payment_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        context["insurance"] = fleet_models.Insurance.objects.all()
+        context["expense"] = finance_models.Expense.objects.all()
+        return context
+
+
+def add_insurance_payment(request: HttpRequest, tenant: str) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    if request.method == "POST":
+        amount = request.POST.get('amount')
+        payment_method = request.POST.get('payment_method')
+        date_payment = request.POST.get('date_payment')
+        insurance = int(request.POST.get('insurance'))
+        contract = int(request.POST.get('contract'))
+        is_sold_out = request.POST.get('is_sold_out')
+        if is_sold_out == 'on':
+            is_sold_out = True
+        else:
+            is_sold_out = False
+        i = fleet_models.InsurancePayment(
+            insurance_id=insurance,
+            contract_id=contract,
+            is_sold_out=True if is_sold_out == 'on' else is_sold_out != 'on',
+        )
+        i.save()
+        expense = finance_models.Expense(
+            insurance_payment=i,
+            amount=amount,
+            payment_method=payment_method,
+            date_payment=datetime.datetime.strptime(date_payment, '%Y-%m-%d  %H:%M').date(),
+            tenant=tenant
+        )
+        expense.save()
+        return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
+    else:
+        return redirect("core:tenant", tenant=tenant.unique_domain)
+
+
+class InsurancePaymentUpdateView(TenantAwareViewMixin, DetailView):
+    model = fleet_models.InsurancePayment
+    template_name = 'pages/tenant/finance/insurance_payment_modif.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        return context
+
+
+def update_insurance_payment(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    u_tenant: 'Tenant' = request.user.profile.tenant
+    tenant = u_tenant
+
+    if request.method != "POST":
+        return redirect("core:tenant", tenant=tenant.unique_domain)
+
+    # Getting datas from the form
+    amount = request.POST.get('amount')
+    payment_method = request.POST.get('payment_method')
+    date_payment = request.POST.get('date_payment')
+    insurance = int(request.POST.get('insurance'))
+    contract = int(request.POST.get('contract'))
+    is_sold_out = request.POST.get('is_sold_out')
+    if is_sold_out == 'on':
+        is_sold_out = True
+    else:
+        is_sold_out = False
+    # Updating the corresponding car object
+    expense = fleet_models.Expense.objects.filter(statut=True, id=type_id)[:1].get()
+    i_payment = fleet_models.InsurancePayment.objects.filter(statut=True, id=type_id)[:1].get()
+    expense.amount = amount
+    expense.payment_method = payment_method
+    expense.date_payment = str(date_payment)
+    i_payment.insurance_id = insurance
+    i_payment.contract_id = contract
+    if is_sold_out == 'on':
+        i_payment.is_sold_out = True
+    else:
+        i_payment.is_sold_out = False
+
+    i_payment.save()
+    expense.save()
+
+    return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
+
+
+def delete_insurance_payment(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    tenant = tenant
+    contract = fleet_models.InsurancePayment.objects.filter(statut=True, id=type_id)[:1].get()
+    contract.delete()
+    return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
