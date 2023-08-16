@@ -16,27 +16,27 @@ if TYPE_CHECKING:
 
 
 class CarListView(TenantAwareViewMixin, ListView):
-	template_name = 'pages/tenant/fleet/car_list.html'
-	form_class = fleet_forms.car.CreateCardForm
+    template_name = 'pages/tenant/fleet/car_list.html'
+    form_class = fleet_forms.car.CreateCardForm
 
     def get_queryset(self):
         return fleet_models.Car.objects.filter(statut=True, tenant=self.tenant)
 
-	def post(self, request, *args, **kwargs):
-		form = self.form_class(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
 
-		if form.is_valid():
-			car = fleet_models.Car(
-				model=form.cleaned_data["model"],
-				brand=form.cleaned_data["brand"],
-				matriculation=form.cleaned_data["matriculation"],
-				color=form.cleaned_data["color"],
-				on_service=form.cleaned_data["on_service"],
-				tenant=self.tenant
-			)
-			car.save()
+        if form.is_valid():
+            car = fleet_models.Car(
+                model=form.cleaned_data["model"],
+                brand=form.cleaned_data["brand"],
+                matriculation=form.cleaned_data["matriculation"],
+                color=form.cleaned_data["color"],
+                on_service=form.cleaned_data["on_service"],
+                tenant=self.tenant
+            )
+            car.save()
 
-		return self.get(request, *args, **kwargs)
+        return self.get(request, *args, **kwargs)
 
 
 class CarDetailView(TenantAwareViewMixin, DetailView):
