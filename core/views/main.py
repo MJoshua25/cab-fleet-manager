@@ -6,7 +6,7 @@ from django.db import transaction
 from tenant.decorators import no_tenant_required
 from core import models
 
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
 from core.forms.auth import LoginForm
 from typing import TYPE_CHECKING, Union
@@ -100,7 +100,5 @@ def validate_domain(request):
 
 
 def logout(request):
-    tenant = request.user.profile.tenant
-    logout(request)
-
+    auth_logout(request)
     return redirect('core:home')

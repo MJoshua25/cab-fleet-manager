@@ -86,7 +86,7 @@ class Insurance(TenantAwareModel):
     car = models.ForeignKey(Car, related_name="voitureAssurance", on_delete=models.CASCADE)
     insurance_company = models.CharField(max_length=100)
     due_date = models.DateTimeField(auto_now=True)
-    monthly_amount = models.CharField(max_length=100)
+    monthly_amount = models.IntegerField()
     last_payment = models.IntegerField(default=0)
     next_date = models.DateTimeField()
 
@@ -98,11 +98,9 @@ class Insurance(TenantAwareModel):
         return f"{self.car} {self.insurance_company}"
 
 
-class InsurancePayment(TenantAwareModel):
-    amount = models.IntegerField(default=0)
+class InsurancePayment(Expense):
+    insurance = models.ForeignKey(Insurance, related_name='payments', on_delete=models.CASCADE)
     contract = models.ForeignKey(Contract, related_name="InsurancePayment", on_delete=models.CASCADE)
-    payment_method = models.CharField(max_length=100, blank=True, null=True)
-    date_payment = models.DateField(default=timezone.now)
     is_sold_out = models.BooleanField(default=False)  # Je comprend pas trop ce champs
 
     class Meta:
