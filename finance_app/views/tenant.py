@@ -255,10 +255,13 @@ class OutageListView(TenantAwareViewMixin, ListView):
 		context = super().get_context_data(**kwargs)
 		return context
 
+	def post(self, request, *args, **kwargs):
+		# Do something
+		return self.get(request, *args, **kwargs)
+
 
 class OutageUpdateView(TenantAwareViewMixin, View):
 
 	def post(self, request, *args, **kwargs):
 		# Do something
 		return redirect('core:tenant:finance:outage_list')
-
