@@ -21,7 +21,7 @@
                    <div class="col-12 col-md-6">
                             <label class="form-label" for="modalAddressLastName">Véhicule</label>
                             <select name="car" class="form-select" id="exampleFormControlSelect1"
-                                    aria-label="Default select example">
+                                    disabled aria-label="Default select example">
                                 {% for car in cars %}
                                     <option value="{{ car.id }}">{{ car.matriculation }}</option>
                                 {% endfor %}
@@ -31,6 +31,7 @@
                             <label class="form-label" for="modalAddressLastName">Compagnie d'assurance</label>
                             <input
                               type="text"
+                              disabled
                               id="modalAddressLastName"
                               name="insurance_company"
                               class="form-control"
@@ -40,6 +41,7 @@
                             <label class="form-label" for="modalAddressLandmark">Montant mensuel </label>
                             <input
                               type="number"
+                              disabled
                               id="modalAddressLandmark"
                               name="monthly_amount"
                               class="form-control"
@@ -49,6 +51,7 @@
                             <label class="form-label" for="modalAddressCity">Dernier paiement </label>
                             <input
                               type="number"
+                              disabled
                               id="modalAddressCity"
                               name="last_payment"
                               class="form-control"
@@ -57,13 +60,13 @@
                         <div class="col-12 col-md-6">
                             <label for="html5-date-input" class="col-md-2 col-form-label"> Date d'échéance paiement</label>
                             <div class="col-md-10">
-                              <input class="form-control" name="due_date" type="datetime-local" value="2021-06-18" id="html5-date-input" />
+                              <input class="form-control" disabled name="due_date" type="datetime-local" value="2021-06-18" id="html5-date-input" />
                             </div>
                         </div>
                          <div class="col-12 col-md-6">
                         <label for="html5-date-input" class="col-md-2 col-form-label"> Prochaine date paiement </label>
                         <div class="col-md-10">
-                          <input class="form-control" name="next_date" type="datetime-local" value="2021-06-18" id="html5-date-input" />
+                          <input class="form-control" disabled name="next_date" type="datetime-local" value="2021-06-18" id="html5-date-input" />
                         </div>
                       </div>
 
