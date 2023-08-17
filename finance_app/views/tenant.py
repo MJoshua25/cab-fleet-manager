@@ -265,3 +265,10 @@ class OutageUpdateView(TenantAwareViewMixin, View):
 	def post(self, request, *args, **kwargs):
 		# Do something
 		return redirect('core:tenant:finance:outage_list')
+
+
+class OutageDeleteView(TenantAwareViewMixin, View):
+
+	def get(self, request, *args, **kwargs):
+		# Do something
+		return redirect('core:tenant:finance:outage_list')

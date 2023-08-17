@@ -21,4 +21,5 @@ urlpatterns = [
     # Urls Outages
     path('panne', tenant.OutageListView.as_view(), name='outage_list'),
     path('panne/<int:outage_id>/modifier/', tenant.OutageUpdateView.as_view(), name='outage_update'),
+    path('panne/<int:outage_id>/supprimer/', tenant.OutageDeleteView.as_view(), name='outage_delete'),
 ]
