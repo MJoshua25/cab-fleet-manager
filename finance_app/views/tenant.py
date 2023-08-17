@@ -243,3 +243,121 @@ def delete_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
     contract = fleet_models.InsurancePayment.objects.filter(statut=True, id=type_id)[:1].get()
     contract.delete()
     return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
+
+
+class OilChangeListView(TenantAwareViewMixin, ListView):
+    template_name = 'pages/tenant/finance/oil_change_list.html'
+
+    def get_queryset(self):
+        return fleet_models.OilChange.objects.filter(statut=True, tenant=self.tenant)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        context["insurance"] = fleet_models.Insurance.objects.all()
+        context["contract"] = fleet_models.Contract.objects.all()
+        context["expense"] = finance_models.Expense.objects.all()
+        return context
+
+
+class OilChangeDetailView(TenantAwareViewMixin, DetailView):
+    model = fleet_models.OilChange
+    template_name = 'pages/tenant/finance/oil_change_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        context["insurance"] = fleet_models.Insurance.objects.all()
+        context["contract"] = fleet_models.Contract.objects.all()
+        context["expense"] = finance_models.Expense.objects.all()
+        return context
+
+
+def add_oil_change(request: HttpRequest, tenant: str) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    if request.method == "POST":
+        amount = request.POST.get('amount')
+        payment_method = request.POST.get('payment_method')
+        date_payment = request.POST.get('date_payment')
+        oil_type = request.POST.get('oil_type')
+        car = int(request.POST.get('car'))
+        service_center = request.POST.get('service_center')
+        date_OilChange = request.POST.get('date_OilChange')
+        date_next_oil_change = request.POST.get('date_next_oil_change')
+        i = fleet_models.OilChange(
+            car_id=car,
+            amount=amount,
+            payment_method=payment_method,
+            oil_type=oil_type,
+            date_payment=datetime.datetime.strptime(date_payment, '%Y-%m-%dT%H:%M').date(),
+            service_center=service_center,
+            date_OilChange=datetime.datetime.strptime(date_OilChange, '%Y-%m-%dT%H:%M').date(),
+            date_next_oil_change=datetime.datetime.strptime(date_next_oil_change, '%Y-%m-%dT%H:%M').date(),
+            tenant=tenant
+        )
+        i.save()
+        return redirect('core:tenant:finance:oil_change_list', tenant=tenant.unique_domain)
+    else:
+        return redirect("core:tenant", tenant=tenant.unique_domain)
+
+
+class OilChangeUpdateView(TenantAwareViewMixin, DetailView):
+    model = fleet_models.OilChange
+    template_name = 'pages/tenant/finance/oil_change_modif.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["drivers"] = fleet_models.Driver.objects.all()
+        context["cars"] = fleet_models.Car.objects.all()
+        context["week"] = core_models.DayOfTheWeek.objects.all()
+        context["insurance"] = fleet_models.Insurance.objects.all()
+        context["contract"] = fleet_models.Contract.objects.all()
+        context["expense"] = finance_models.Expense.objects.all()
+        return context
+
+
+def update_oil_change(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    u_tenant: 'Tenant' = request.user.profile.tenant
+    tenant = u_tenant
+
+    if request.method != "POST":
+        return redirect("core:tenant", tenant=tenant.unique_domain)
+
+    # Getting datas from the form
+    amount = request.POST.get('amount')
+    payment_method = request.POST.get('payment_method')
+    date_payment = request.POST.get('date_payment')
+    car = int(request.POST.get('car'))
+    oil_type=request.POST.get('oil_type')
+    service_center = request.POST.get('service_center')
+    date_OilChange = request.POST.get('date_OilChange')
+    date_next_oil_change = request.POST.get('date_next_oil_change')
+
+    # Updating the corresponding car object
+    oilchange = fleet_models.OilChange.objects.filter(statut=True, id=type_id)[:1].get()
+    oilchange.amount = amount
+    oilchange.payment_method = payment_method
+    oilchange.date_payment = datetime.datetime.strptime(date_payment, '%Y-%m-%dT%H:%M').date()
+    oilchange.date_payment = str(oilchange.date_payment)
+    oilchange.car_id = car
+    oilchange.service_center = service_center
+    oilchange.oil_type = oil_type
+    oilchange.date_OilChange = datetime.datetime.strptime(date_OilChange, '%Y-%m-%dT%H:%M').date()
+    oilchange.date_OilChange = str(oilchange.date_OilChange)
+    oilchange.date_next_oil_change = datetime.datetime.strptime(date_next_oil_change, '%Y-%m-%dT%H:%M').date()
+    oilchange.date_next_oil_change = str(oilchange.date_next_oil_change)
+
+    oilchange.save()
+    return redirect('core:tenant:finance:oil_change_list', tenant=tenant.unique_domain)
+
+
+def delete_oil_change(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
+    tenant: 'Tenant' = request.user.profile.tenant
+    tenant = tenant
+    oilchange = fleet_models.OilChange.objects.filter(statut=True, id=type_id)[:1].get()
+    oilchange.delete()
+    return redirect('core:tenant:finance:oil_change_list', tenant=tenant.unique_domain)
