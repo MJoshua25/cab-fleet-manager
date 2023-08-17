@@ -18,6 +18,14 @@ class IndexView(TenantAwareViewMixin, TemplateView):
             statut=True,
             tenant=self.tenant
         ).count()
+        context["contract_number"] = fleet_app_models.Contract.objects.filter(
+            statut=True,
+            tenant=self.tenant
+        ).count()
+        context["payment_number"] = fleet_app_models.Expense.objects.filter(
+            statut=True,
+            tenant=self.tenant
+        ).count()
         return context
 
 
