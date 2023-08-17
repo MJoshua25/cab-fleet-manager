@@ -20,7 +20,7 @@
       <br> <br>
        <!-- Responsive Datatable -->
        <div class="card">
-                <h5 class="card-header">Gestion des assurances</h5>
+                <h5 class="card-header">Paiement des assurances</h5>
                 <div class="card-datatable table-responsive">
                   <table class="dt-responsive table">
                     <thead>
@@ -35,12 +35,16 @@
                     </thead>
                       {% for insp in object_list %}
                       <tr>
-                          <td>{{ expense.amount }}</td>
-                          <td>{{ expense.payment_method }}</td>
-                          <td>{{ expense.date_payment|date:"Y-m-d" }}</td>
+                          <td>{{ insp.amount }}</td>
+                          <td>{{ insp.payment_method }}</td>
+                          <td>{{ insp.date_payment|date:"Y-m-d" }}</td>
                           <td>{{ insp.insurance.insurance_company }}</td>
-                          <td>{{ insp.contract.driver.driver_license }}</td>
-                          <td>{{ insp.is_sold_out }}</td>
+                          <td>{{ insp.contract.driver.last_name }}</td>
+                          {% if insp.is_sold_out %}
+                          <td>Oui</td>
+                          {% else %}
+                          <td>Non</td>
+                          {% endif %}
                           <td>
                               <a href="{% url 'core:tenant:finance:insurance_payment_detail' tenant=unique_domain pk=insp.id  %}" style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
