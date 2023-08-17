@@ -53,6 +53,10 @@ class Driver(TenantAwareModel):
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.license_number})"
 
+    @property
+    def name(self) -> str:
+        return f'{self.first_name} {self.last_name}'
+
 
 class Contract(TenantAwareModel):
     driver = models.ForeignKey(Driver, related_name="contratChauffeur", on_delete=models.CASCADE)
