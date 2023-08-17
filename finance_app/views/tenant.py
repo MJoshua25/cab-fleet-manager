@@ -58,9 +58,9 @@ def add_insurance(request: HttpRequest, tenant: str) -> HttpResponse:
             car_id=car,
             insurance_company=insurance_company,
             monthly_amount=monthly_amount,
-            due_date=datetime.datetime.strptime(due_date, '%Y-%m-%d  %H:%M').date(),
+            due_date=datetime.datetime.strptime(due_date, '%Y-%m-%dT%H:%M').date(),
             last_payment=last_payment,
-            next_date=datetime.datetime.strptime(next_date, '%Y-%m-%d  %H:%M').date(),
+            next_date=datetime.datetime.strptime(next_date, '%Y-%m-%dT%H:%M').date(),
             tenant=tenant
         )
         print("due_date", due_date)
@@ -104,10 +104,12 @@ def update_insurance(request: HttpRequest, tenant: str, type_id: int) -> HttpRes
     insurance = fleet_models.Insurance.objects.filter(statut=True, id=type_id)[:1].get()
     insurance.car_id = car
     insurance.insurance_company = insurance_company
-    insurance.due_date = str(due_date)
+    insurance.due_date = datetime.datetime.strptime(due_date, '%Y-%m-%dT%H:%M').date()
+    insurance.due_date = str(insurance.due_date)
     insurance.monthly_amount = monthly_amount
     insurance.last_payment = last_payment
-    insurance.next_date = str(next_date)
+    insurance.next_date = datetime.datetime.strptime(next_date, '%Y-%m-%dT%H:%M').date()
+    insurance.next_date = str(insurance.next_date)
     print("due_date", insurance.due_date)
     print("other", insurance.next_date)
     insurance.save()
@@ -150,6 +152,7 @@ class InsurancePaymentDetailView(TenantAwareViewMixin, DetailView):
         context["cars"] = fleet_models.Car.objects.all()
         context["week"] = core_models.DayOfTheWeek.objects.all()
         context["insurance"] = fleet_models.Insurance.objects.all()
+        context["contract"] = fleet_models.Contract.objects.all()
         context["expense"] = finance_models.Expense.objects.all()
         return context
 
@@ -171,16 +174,12 @@ def add_insurance_payment(request: HttpRequest, tenant: str) -> HttpResponse:
             insurance_id=insurance,
             contract_id=contract,
             is_sold_out=True if is_sold_out == 'on' else is_sold_out != 'on',
-        )
-        i.save()
-        expense = finance_models.Expense(
-            insurance_payment=i,
             amount=amount,
             payment_method=payment_method,
-            date_payment=datetime.datetime.strptime(date_payment, '%Y-%m-%d  %H:%M').date(),
+            date_payment=datetime.datetime.strptime(date_payment, '%Y-%m-%dT%H:%M').date(),
             tenant=tenant
         )
-        expense.save()
+        i.save()
         return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
     else:
         return redirect("core:tenant", tenant=tenant.unique_domain)
@@ -195,6 +194,9 @@ class InsurancePaymentUpdateView(TenantAwareViewMixin, DetailView):
         context["drivers"] = fleet_models.Driver.objects.all()
         context["cars"] = fleet_models.Car.objects.all()
         context["week"] = core_models.DayOfTheWeek.objects.all()
+        context["insurance"] = fleet_models.Insurance.objects.all()
+        context["contract"] = fleet_models.Contract.objects.all()
+        context["expense"] = finance_models.Expense.objects.all()
         return context
 
 
@@ -212,16 +214,18 @@ def update_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
     insurance = int(request.POST.get('insurance'))
     contract = int(request.POST.get('contract'))
     is_sold_out = request.POST.get('is_sold_out')
+    print('Bfdate_payment', date_payment)
     if is_sold_out == 'on':
         is_sold_out = True
     else:
         is_sold_out = False
     # Updating the corresponding car object
-    expense = fleet_models.Expense.objects.filter(statut=True, id=type_id)[:1].get()
     i_payment = fleet_models.InsurancePayment.objects.filter(statut=True, id=type_id)[:1].get()
-    expense.amount = amount
-    expense.payment_method = payment_method
-    expense.date_payment = str(date_payment)
+    i_payment.amount = amount
+    i_payment.payment_method = payment_method
+    i_payment.date_payment = datetime.datetime.strptime(date_payment, '%Y-%m-%dT%H:%M').date()
+    i_payment.date_payment = str(i_payment.date_payment)
+    print('Afdate_payment', i_payment.date_payment)
     i_payment.insurance_id = insurance
     i_payment.contract_id = contract
     if is_sold_out == 'on':
@@ -230,8 +234,6 @@ def update_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
         i_payment.is_sold_out = False
 
     i_payment.save()
-    expense.save()
-
     return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
 
 
