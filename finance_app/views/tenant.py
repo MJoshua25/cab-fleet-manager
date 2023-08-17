@@ -243,3 +243,15 @@ def delete_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
     contract = fleet_models.InsurancePayment.objects.filter(statut=True, id=type_id)[:1].get()
     contract.delete()
     return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
+
+
+class OutageListView(TenantAwareViewMixin, ListView):
+    template_name = 'pages/tenant/finance/outage/outage_list.html'
+
+    def get_queryset(self):
+        return fleet_models.Outage.objects.filter(statut=True, tenant=self.tenant).order_by('is_okay', '-date_payment')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
