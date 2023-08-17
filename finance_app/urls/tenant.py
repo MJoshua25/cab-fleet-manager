@@ -19,5 +19,6 @@ urlpatterns = [
     path('paiement_assurance/modifier_paiement_assurance/<int:type_id>', tenant.update_insurance_payment, name='update_tenant_insurance_payment'),
     path('paiement_assurance/supprimer_paiement_assurance/<int:type_id>', tenant.delete_insurance_payment, name='delete_tenant_insurance_payment'),
     # Urls Outages
-    path('outage', tenant.OutageListView.as_view(), name='outage_list'),
+    path('panne', tenant.OutageListView.as_view(), name='outage_list'),
+    path('panne/<int:outage_id>/modifier/', tenant.OutageUpdateView.as_view(), name='outage_update'),
 ]
