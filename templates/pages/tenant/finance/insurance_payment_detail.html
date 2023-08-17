@@ -1,0 +1,107 @@
+{% extends 'bases/tenant/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block tenant_content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion des finances / Gestion des assurances / </span> Paiement des assurances </h4>
+       <hr class="my-5" />
+   <h5>Détails de paiement d'assurance</h5>
+
+              <hr class="my-5" />
+
+              <!-- Responsive Datatable -->
+              <form id="addContractForm" class="row g-3">
+               <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Montant </label>
+                            <input
+                              type="number"
+                              disabled
+                              id="modalAddressLandmark"
+                              name="amount"
+                              class="form-control"
+                              value="{{ object.amount }}" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Méthode de paiement</label>
+                            <input
+                              type="text"
+                              disabled
+                              id="modalAddressLastName"
+                              name="payment_method"
+                              class="form-control"
+                              value="{{ object.payment_method }}" />
+                          </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Contrat</label>
+                            <select name="contract" class="form-select" id="exampleFormControlSelect1"
+                                   disabled aria-label="Default select example">
+                                {% for con in contract %}
+                                    <option value="{{ con.id }}">{{ con.driver.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                         </div>
+                         <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Assurance</label>
+                            <select name="insurance" class="form-select" id="exampleFormControlSelect1"
+                                    disabled aria-label="Default select example">
+                                {% for ins in insurance %}
+                                    <option value="{{ ins.id }}">{{ ins.insurance_company }}</option>
+                                {% endfor %}
+                            </select>
+                         </div>
+                          <div class="col-12 col-md-6">
+                    <label class="form-label" for="modalAddressCity">Est soldé</label>
+                    <input
+                      type="text"
+                      disabled
+                      id="modalAddressCity"
+                      name="is_sold_out"
+                      class="form-control"
+                      {% if object.is_sold_out %}
+                      placeholder="Oui"
+                      {% else %}
+                      placeholder="Non"
+                        {% endif %}/>
+                  </div>
+                        <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date de paiement </label>
+                            <input
+                      type="text"
+                      disabled
+                      id="modalAddressCity"
+                      name="date_payment"
+                      class="form-control"
+                      placeholder="{{ object.date_payment }}"
+                      />
+
+                      </div>
+
+
+              </form>
+              <!--/ Responsive Datatable -->
+  </div>
+
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}
