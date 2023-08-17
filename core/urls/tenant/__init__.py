@@ -6,4 +6,5 @@ app_name = 'tenant'
 urlpatterns = [
 	path('', tenant.IndexView.as_view(), name='home'),
 	path('flotte/', include('fleet_app.urls.tenant'), name='fleet'),
+	path('finance/', include('finance_app.urls.tenant'), name='finance'),
 ]

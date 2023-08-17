@@ -1,87 +1,436 @@
 {% load static %}
 <!DOCTYPE html>
+<html lang="en">
 
-<html
-  lang="fr"
-  class="light-style"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="{% static 'application' %}"
-  data-template="vertical-menu-template-no-customizer">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<head>
+    <!-- Required Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>Fleet-wise</title>
+    <title> Fleet-Wise</title>
+    <link rel="icon" type="image/png" href="{% static 'applicationFront/img/favicon.png' %}" />
 
-    <meta name="description" content="" />
+    <!--Core CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'applicationFront/css/app.css' %}">
+    <link id="theme-sheet" rel="stylesheet" href="{% static 'applicationFront/css/core.css' %}">
+</head>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% static 'application/img/favicon/favicon.ico' %}" />
+<body class="is-theme-core">
+    <div class="pageloader"></div>
+    <div class="infraloader is-active"></div>
+    <!-- Hero and nav -->
+    <div id="landing-hero" class="hero animated-hero is-relative is-theme-primary has-waves-bottom" data-page-theme="night">
+        <nav class="navbar navbar-wrapper navbar-fade navbar-light is-transparent">
+            <div class="container">
+                <!-- Brand -->
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="/">
+                        <img class="light-logo" src="{% static 'applicationFront/img/logos/logo1WBck.png' %}" alt="" >
+                        <img class="dark-logo switcher-logo" src="{% static 'applicationFront/img/logos/logo1WBck.svg' %}" alt="">
+                    </a>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet" />
+                    <!-- Responsive toggle -->
+                    <div class="custom-burger" data-target="">
+                        <a id="" class="responsive-btn" href="javascript:void(0);">
+                            <span class="menu-toggle">
+                              <span class="icon-box-toggle">
+                                  <span class="rotate">
+                                      <i class="icon-line-top"></i>
+                                      <i class="icon-line-center"></i>
+                                      <i class="icon-line-bottom"></i>
+                                  </span>
+                            </span>
+                            </span>
+                        </a>
+                    </div>
+                    <!-- /Responsive toggle -->
+                </div>
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="{% static 'application/vendor/fonts/fontawesome.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/fonts/tabler-icons.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/fonts/flag-icons.css' %}" />
+                <!-- Navbar menu -->
+                <div class="navbar-menu">
+                    <!-- Navbar Start -->
+                    <div class="navbar-start">
+                        <!-- Navbar item -->
+                        <a class="navbar-item is-slide" href="#main-hero">
+                            Accueil
+                        </a>
+                        <!-- Navbar item -->
+                        <a class="navbar-item is-slide" href="#contactUs">
+                            Contact
+                        </a>
+                        <!-- Navbar item -->
+                        <a class="navbar-item is-slide" href="#newsletter">
+                            Newsletter
+                        </a>
+                    </div>
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="{% static 'application/vendor/css/rtl/core.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/css/rtl/theme-default.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/css/demo.css' %}" />
+                    <!-- Navbar end -->
+                    <div class="navbar-end">
+                        <!-- Signup button -->
+                        <div class="navbar-item">
+                            <a id="#signup-btn" href="{% url 'core:login' %}" class="button button-signup btn-outlined is-bold btn-align light-btn rounded raised">
+                                Connectez-vous
+                            </a>
+                        </div>
+                          <div class="navbar-item">
+                            <a id="#signup-btn" href="{% url 'core:register' %}" class="button button-signup btn-outlined is-bold btn-align light-btn rounded raised">
+                                Inscrivez-vous
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Hero caption -->
+        <div id="main-hero" class="hero-body">
+            <div class="container">
+                <div class="columns is-vcentered is-tablet-portrait">
+                    <!-- Caption -->
+                    <div class="column is-5 is-header-caption has-text-left">
+                        <h1 class="title main-title landing-title">Fleet-Wise</h1>
+                        <h2 class="subtitle is-5 light-text">
+                            Prenez les commandes de votre flotte avec simplicité et efficacité grâce à notre application de gestion Fleet-Wise.
+                            Optimisez vos ressources, suivez vos véhicules en temps réel et prenez des décisions éclairées pour une gestion de flotte plus intelligente.
+                        </h2>
+                        <p class="buttons">
+                            <a href="#services" class="
+                    button button-cta
+                    btn-align btn-outlined
+                    is-bold
+                    light-btn
+                    rounded
+                    z-index-2
+                  ">
+                                Démarrez
+                            </a>
+                            <a href="#" class="
+                    button button-cta
+                    btn-align btn-outlined
+                    is-bold
+                    light-btn
+                    rounded
+                    z-index-2
+                  ">
+                                Essaie-Gratuit
+                            </a>
+                        </p>
+                    </div>
+                    <!-- UI Mockup -->
+                    <div class="column is-8 is-offset-1">
+                        <figure class="image is-3by2 hero-figure is-pushed">
+                            <!--img class="has-light-shadow" src="{% static 'applicationFront/img/graphics/apps/app-1-core.png' %}"
+                                data-base-url="{% static 'applicationFront/img/graphics/apps/app-1" data-extension=".png' %}" alt=""-->
+                            <img class="has-light-shadow" src="{% static 'applicationFront/img/graphics/static/app-1.png' %}" alt="" />
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/node-waves/node-waves.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/typeahead-js/typeahead.css' %}" />
+    <!-- Services section -->
+    <div id="services" class="section is-medium">
+        <div class="container">
+            <!-- Title -->
+            <div class="section-title-wrapper has-text-centered">
+                <h2 class="section-title-landing">Une gestion en toute simplicité </h2>
+                <h4>Maîtrisez chaque rouage, pilotez chaque succès : Votre Flotte, Notre Expertise.</h4>
+            </div>
 
-    <!-- Page CSS -->
+            <div class="content-wrapper">
+                <div class="columns is-vcentered is-multiline has-text-centered">
+                    <!-- Icon block -->
+                    <div class="column is-3">
+                        <div class="wavy-icon-box">
+                            <div class="is-icon-reveal">
+                                <i class="im im-icon-Statistic"></i>
+                            </div>
+                            <div class="box-title">Statistique</div>
+                            <p class="box-content is-tablet-padded">
+                                Notre tableau de bord vous offre une vision claire pour des décisions éclairées et des résultats remarquables.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Icon block -->
+                    <div class="column is-3">
+                        <div class="wavy-icon-box">
+                            <div class="is-icon-reveal">
+                                <i class="im im-icon-Financial"></i>
+                            </div>
+                            <div class="box-title">Maintenance</div>
+                            <p class="box-content is-tablet-padded">
+                                Gérez vos finances à travers Fleet-Wise en passant par les pannes, versements, vidanges ....
+                                Pour la suivie de votre flotte.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Icon block -->
+                    <div class="column is-3">
+                        <div class="wavy-icon-box">
+                            <div class="is-icon-reveal">
+                                <i class="im im-icon-Timer-2"></i>
+                            </div>
+                            <div class="box-title">Fluidité</div>
+                            <p class="box-content is-tablet-padded">
+                                Découvrez une nouvelle ère de gestion avec notre application intuitive, puissante, fluide et aisée.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Icon block -->
+                    <div class="column is-3">
+                        <div class="wavy-icon-box">
+                            <div class="is-icon-reveal">
+                                <i class="im im-icon-Security-Block"></i>
+                            </div>
+                            <div class="box-title">Sécurité</div>
+                            <p class="box-content is-tablet-padded">
+                                Explorez notre application qui protège vos données
+                                tout en offrant une expérience utilisateur exceptionnelle.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Helpers -->
-    <script src="{% static 'application/vendor/js/helpers.js' %}"></script>
 
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{% static 'application/js/config.js' %}"></script>
-  </head>
+    <div id ="contactUs" class="section">
+        <div class="container">
+            <div class="section-title-wrapper has-text-centered">
+                <h2 class="section-title-landing">Contactez-nous </h2>
+                <h4>Notre formulaire de contact qui simplifiera la communication et fera le rapprochement avec vos besoins en un seul clic.</h4>
+            </div>
+            <!--Contact Page 1-->
+            <br><br>
+            <div class="contact-page-1">
+                <div class="columns">
+                    <div class="column is-5">
+                        <div class="contact-page-form flex-card">
+                            <h3>Contactez-nous</h3>
+                            <p>Utilisez notre formulaire pour nous laisser un message.</p>
 
-  <body>
-    <!-- Content -->
+                            <div class="columns is-multiline">
+                                <div class="column is-12">
+                                    <div class="field">
+                                        <label>Nom & Prénoms</label>
+                                        <div class="control has-icons-left">
+                                            <input type="text" class="input is-medium" placeholder="Koffi Ange" />
+                                            <span class="icon is-left is-small">
+                          <i class="sl sl-icon-user"></i>
+                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column is-12">
+                                    <div class="field">
+                                        <label>Email</label>
+                                        <div class="control has-icons-left">
+                                            <input type="text" class="input is-medium" placeholder="Koffange@gmail.com" />
+                                            <span class="icon is-left is-small">
+                          <i class="sl sl-icon-envelope-open"></i>
+                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column is-12">
+                                    <div class="field">
+                                        <label>Message</label>
+                                        <div class="control">
+                                            <textarea class="textarea" rows="4" placeholder="Bonjour !"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="column is-12">
+                                    <div class="field">
+                                        <div class="control">
+                                            <button type="button" class="
+                            button button-cta
+                            primary-btn
+                            no-lh
+                            is-bold
+                            raised
+                            is-fullwidth
+                          ">
+                                                Envoyez
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-7">
+                        <div id="mapbox-1" class="mapbox-map map-1"></div>
+                    </div>
+                </div>
 
-    <h4 class="fw-bold p-4">Bienvenu sur Fleet-wise</h4>
-    <a href="{% url 'core:login' %}">Se connecter</a>
-    <a href="{% url 'core:register' %}">S'inscrire</a>
+                <div class="columns has-text-centered pt-80 pb-80">
+                    <div class="column is-hidden-mobile"></div>
+                    <!-- Icon box -->
+                    <div class="column is-3">
+                        <div class="shadow-icon-box rounded">
+                            <span><i class="fa fa-map fa-lg"></i></span>
+                        </div>
+                        <div class="shadow-title dark-text">Addresse</div>
+                        <div class="description shadow-description">
+                            Angré Nouveau CHU
+                            <br />Abidjan, CI
+                        </div>
+                    </div>
+                    <!-- Icon box -->
+                    <div class="column is-3">
+                        <div class="shadow-icon-box rounded">
+                            <span><i class="fa fa-envelope fa-lg"></i></span>
+                        </div>
+                        <div class="shadow-title dark-text">Email</div>
+                        <div class="description shadow-description">fleetwise@gmail.com</div>
+                    </div>
+                    <!-- Icon box -->
+                    <div class="column is-3">
+                        <div class="shadow-icon-box rounded">
+                            <span><i class="fa fa-phone-square fa-lg"></i></span>
+                        </div>
+                        <div class="shadow-title dark-text">Téléphone</div>
+                        <div class="description shadow-description">+225 0102467899</div>
+                    </div>
+                    <div class="column is-hidden-mobile"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- / Content -->
+    <!-- Contact form -->
+    <div class="
+        section
+        is-medium is-relative
+        has-waves-bottom-dark
+        section-feature-grey
+      ">
+        <div id="newsletter" class="container">
+            <!-- Title -->
+            <div class="section-title-wrapper has-text-centered">
+                <h2 class="section-title-landing">Newsletter</h2>
+                <h4>
+                    Nos dernières actualités directement dans votre boîte de réception, pour ne jamais manquer une seule mise à jour.
+                </h4>
+            </div>
+            <!-- /Title -->
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="{% static 'application/vendor/libs/jquery/jquery.js' %}"></script>
-    <script src="{% static 'application/vendor/libs/popper/popper.js' %}"></script>
-    <script src="{% static 'application/vendor/js/bootstrap.js' %}"></script>
-    <script src="{% static 'application/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
-    <script src="{% static 'application/vendor/libs/node-waves/node-waves.js' %}"></script>
+            <div class="content-wrapper giant-pb">
+                <form>
+                    <div class="columns">
+                        <div class="column is-8 is-offset-2">
+                            <div class="columns is-vcentered">
+                                <div class="column is-3">
+                                    <!-- Form field -->
+                                    <div class="control-material is-primary">
+                                        <input class="material-input" type="text" required />
+                                        <span class="material-highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Nom</label>
+                                    </div>
+                                </div>
+                                <div class="column is-3">
+                                    <!-- /Form field -->
+                                    <div class="control-material is-primary">
+                                        <input class="material-input" type="text" required />
+                                        <span class="material-highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Email </label>
+                                    </div>
+                                </div>
+                                <div class="column is-3">
+                                    <!-- Form field -->
+                                    <div class="control-material is-primary">
+                                        <input class="material-input" type="text" required />
+                                        <span class="material-highlight"></span>
+                                        <span class="bar"></span>
+                                        <label>Entreprise </label>
+                                    </div>
+                                </div>
+                                <div class="column is-3">
+                                    <button type="submit" class="
+                        button button-cta
+                        btn-align
+                        primary-btn
+                        btn-outlined
+                        is-bold
+                        rounded
+                        raised
+                        no-lh
+                      ">
+                                        Envoyez
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <script src="{% static 'application/vendor/libs/hammer/hammer.js' %}"></script>
-    <script src="{% static 'application/vendor/libs/i18n/i18n.js' %}"></script>
-    <script src="{% static 'application/vendor/libs/typeahead-js/typeahead.js' %}"></script>
+    <!-- Dark footer -->
+    <footer id="dark-footer" class="footer footer-dark">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <div class="footer-column">
+                        <div class="footer-header">
+                            <ul class="link-list">
+                                <li><a href="#main-hero">Accueil</a></li></h2>
+                                <li><a href="#contactUs">Contact</a></li>
+                                <li><a href="#newsletter">Newsletter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-    <script src="{% static 'application/vendor/js/menu.js' %}"></script>
-    <!-- endbuild -->
+                <div class="column">
+                    <div class="footer-column">
+                        <div class="footer-logo">
+                            <img class="switcher-logo-w" src="{% static 'applicationFront/img/logos/logo/logo1WBck.png' %}" alt="">
+                        </div>
+                        <div class="footer-header">
+                            <nav class="level is-mobile">
+                                <div class="level-left level-social">
+                                    <a href="#" class="level-item">
+                                        <span class="icon"><i class="fa fa-facebook"></i></span>
+                                    </a>
+                                    <a href="#" class="level-item">
+                                        <span class="icon"><i class="fa fa-twitter"></i></span>
+                                    </a>
+                                    <a href="#" class="level-item">
+                                        <span class="icon"><i class="fa fa-linkedin"></i></span>
+                                    </a>
+                                    <a href="#" class="level-item">
+                                        <span class="icon"><i class="fa fa-dribbble"></i></span>
+                                    </a>
+                                    <a href="#" class="level-item">
+                                        <span class="icon"><i class="fa fa-github"></i></span>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
 
-    <!-- Vendors JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- /Dark footer -->
 
-    <!-- Main JS -->
-    <script src="{% static 'application/js/main.js' %}"></script>
+    <!-- Back To Top Button -->
+    <div id="backtotop"><a href="#"></a></div>
 
-    <!-- Page JS -->
-  </body>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <script src="{% static 'applicationFront/js/app.js' %}"></script>
+    <script src="{% static 'applicationFront/js/core.js' %}"></script>
+
+</body>
+
 </html>

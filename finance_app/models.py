@@ -6,14 +6,15 @@ from django.utils import timezone
 # Create your models here.
 class Expense(TenantAwareModel):
 	amount = models.IntegerField(default=0)
-	Payment_Method = models.CharField(max_length=100, null=True, blank=True)
+	payment_method = models.CharField(max_length=100, null=True, blank=True)
+	date_payment = models.DateField(default=timezone.now)
 
 	class Meta:
 		verbose_name = "Expense"
 		verbose_name_plural = "Expenses"
 
 	def __str__(self):
-		return f"{self.amount} {self.Payment_Method}"
+		return f"{self.amount} {self.payment_method}"
 
 
 class Payment(TenantAwareModel):
