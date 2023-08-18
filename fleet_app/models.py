@@ -117,7 +117,7 @@ class InsurancePayment(Expense):
 
 class Outage(Expense):
     car = models.ForeignKey(Car, related_name="outages", on_delete=models.CASCADE)
-    driver = models.ForeignKey(Driver, related_name="outages", on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, related_name="outages", on_delete=models.CASCADE, null=True, blank=True)
     reason = models.ForeignKey(OutageReason, related_name="outages", on_delete=models.CASCADE)
     location = models.CharField(max_length=100)
     is_okay = models.BooleanField(default=False)
