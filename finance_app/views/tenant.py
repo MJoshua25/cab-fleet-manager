@@ -253,6 +253,9 @@ class OutageListView(TenantAwareViewMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		context["drivers"] = fleet_models.Driver.objects.filter(statut=True, tenant=self.tenant)
+		context["cars"] = fleet_models.Car.objects.filter(statut=True, tenant=self.tenant)
+		context["reasons"] = fleet_models.OutageReason.objects.filter(statut=True, tenant=self.tenant)
 		return context
 
 	def post(self, request, *args, **kwargs):
