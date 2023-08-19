@@ -33,6 +33,7 @@
                         <th>Motif</th>
                         <th>Date</th>
                         <th>Réglé ?</th>
+                        <th>Action</th>
                     </thead>
                     {% for outage in object_list %}
                         <tr>
@@ -51,7 +52,7 @@
                                    style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
                                 ></a>
-                                <a href=""
+                                <a href="#outageUpdate{{ outage.id }}"
                                    style="color: blue" class="dropdown-notifications-archive"
                                 ><span class="ti ti-edit-circle"></span
                                 ></a>
@@ -167,7 +168,7 @@
                     <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                            <h3 class="address-title mb-2">Détails de la panne </h3>
+                            <h3 class="address-title mb-2">Détails de la panne n°{{ outage.id }}</h3>
                         </div>
                         <form id="outageDetailForm{{ outage.id }}" method="post" class="row g-3"
                               action="#">
@@ -193,7 +194,7 @@
                                 <label class="form-label" for="reasonSelect">Motif de panne</label>
                                 <select name="reason" class="form-select" id="reasonAddSelect"
                                         aria-label="Default select example" disabled>
-                                        <option value="{{ outage.reason.id }}">{{ outage.reason.name }}</option>
+                                    <option value="{{ outage.reason.id }}">{{ outage.reason.name }}</option>
                                 </select>
                             </div>
                             <div class="col-12 col-md-6">
@@ -238,6 +239,101 @@
                                         value="{{ outage.date_payment }}"
                                         disabled
                                         id="datePaymentAdd"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <!--/ Outage details -->
+
+    <!-- Outage details Modal -->
+    {% for outage in object_list %}
+        <div class="modal fade" id="outageUpdate{{ outage.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+                <div class="modal-content p-3 p-md-5">
+                    <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                            <h3 class="address-title mb-2">Modifier la panne n°{{ outage.id }}</h3>
+                        </div>
+                        <form id="outageUpdateForm{{ outage.id }}" method="post" class="row g-3"
+                              action="{% url 'core:tenant:finance:outage_update' tenant=unique_domain outage_id=outage.id %}">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="carUpdateSelect{{ outage.id }}">Véhicule</label>
+                                <select name="car" class="form-select" id="carUpdateSelect{{ outage.id }}"
+                                        aria-label="Default select example">
+                                    {% for car in cars %}
+                                        <option value="{{ car.id }}"
+                                                {% if car.id == outage.car.id %}selected{% endif %}>{{ car.matriculation }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="driverUpdateSelect{{ outage.id }}">chauffeur</label>
+                                <select name="driver" class="form-select" id="driverUpdateSelect{{ outage.id }}"
+                                        aria-label="Default select example">
+                                    <option value="" {% if outage.driver == None %}selected{% endif %}>Aucun</option>
+                                    {% for driver in drivers %}
+                                        <option value="{{ driver.id }}"
+                                                {% if outage.driver.id == driver.id %}selected{% endif %}>{{ driver.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="reasonUpdateSelect{{ outage.id }}">Motif de panne</label>
+                                <select name="reason" class="form-select" id="reasonUpdateSelect{{ outage.id }}"
+                                        aria-label="Default select example">
+                                    {% for reason in reasons %}
+                                        <option value="{{ reason.id }}"
+                                                {% if outage.reason.id == reason.id %}selected{% endif %}>{{ reason.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="locationUpdate{{ outage.id }}">Lieu de la panne</label>
+                                <input
+                                        type="text"
+                                        id="locationUpdate{{ outage.id }}"
+                                        name="location"
+                                        class="form-control"
+                                        value="{{ outage.location }}"
+                                        placeholder="Abobo"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="amountUpdate{{ outage.id }}">Montant </label>
+                                <input
+                                        type="number"
+                                        id="amountUpdate{{ outage.id }}"
+                                        name="amount"
+                                        value="{{ outage.amount }}"
+                                        class="form-control"
+                                        placeholder="12400"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="paymentMethodUpdate{{ outage.id }}">Moyen de
+                                    paiement </label>
+                                <input
+                                        type="text"
+                                        id="paymentMethodUpdate{{ outage.id }}"
+                                        name="paymentMethod"
+                                        class="form-control"
+                                        value="{{ outage.payment_method }}"
+                                        placeholder="Espèce"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="datePayementUpdate{{ outage.id }}" class="col-form-label"> Date de
+                                    paiement</label>
+                                <input
+                                        class="form-control"
+                                        name="datePayementUpdate{{ outage.id }}"
+                                        type="date"
+                                        value="{{ outage.date_payment }}"
+                                        id="datePaymentAdd"/>
+                            </div>
+                            <div class="col-12 text-center">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Ajouter</button>
                             </div>
                         </form>
                     </div>
