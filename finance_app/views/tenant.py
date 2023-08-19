@@ -5,6 +5,7 @@ from fleet_app import models as fleet_models
 from finance_app import models as finance_models
 from core import models as core_models
 from tenant.mixin import TenantAwareViewMixin
+from finance_app import forms as finance_app_forms
 from tenant import models as tenant_models
 from django.db import transaction
 from django.utils import timezone
@@ -247,6 +248,7 @@ def delete_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
 
 class OutageListView(TenantAwareViewMixin, ListView):
 	template_name = 'pages/tenant/finance/outage/outage_list.html'
+	form_class = finance_app_forms.outage.OutageForm
 
 	def get_queryset(self):
 		return fleet_models.Outage.objects.filter(statut=True, tenant=self.tenant).order_by('is_okay', '-date_payment')
@@ -259,19 +261,36 @@ class OutageListView(TenantAwareViewMixin, ListView):
 		return context
 
 	def post(self, request, *args, **kwargs):
-		# Do something
+		form = self.form_class(request.POST)
+		if form.is_valid():
+			outage = form.save()
 		return self.get(request, *args, **kwargs)
 
 
 class OutageUpdateView(TenantAwareViewMixin, View):
+	form_class = finance_app_forms.outage.OutageForm
 
 	def post(self, request, *args, **kwargs):
-		# Do something
+		outage_id = kwargs.get('outage_id', None)
+		if not outage_id:
+			return redirect('core:tenant:finance:outage_list')
+		outage = fleet_models.Outage.objects.filter(pk=outage_id).first()
+		if not outage:
+			return redirect('core:tenant:finance:outage_list')
+		form = self.form_class(request.POST, instance=outage)
+		if form.is_valid():
+			form.save()
 		return redirect('core:tenant:finance:outage_list')
 
 
 class OutageDeleteView(TenantAwareViewMixin, View):
 
 	def get(self, request, *args, **kwargs):
-		# Do something
+		outage_id = kwargs.get('outage_id', None)
+		if not outage_id:
+			return redirect('core:tenant:finance:outage_list')
+		outage = fleet_models.Outage.objects.filter(pk=outage_id).first()
+		if not outage:
+			return redirect('core:tenant:finance:outage_list')
+		outage.delete()
 		return redirect('core:tenant:finance:outage_list')
