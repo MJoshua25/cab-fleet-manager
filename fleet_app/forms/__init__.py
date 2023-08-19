@@ -1,1 +1,1 @@
-from . import car
+from . import car, insurance
