@@ -81,6 +81,11 @@
                     <form id="addNewOutageForm" method="post" class="row g-3"
                           action="{% url 'core:tenant:finance:outage_list' tenant=unique_domain %}">
                         {% csrf_token %}
+                        <input
+                                        type="hidden"
+                                        id="tenantAdd"
+                                        name="tenant"
+                                        value="{{ tenant.id }}"/>
                         <div class="col-12 col-md-6">
                             <label class="form-label" for="carSelect">Véhicule</label>
                             <select name="car" class="form-select" id="carSelect"
@@ -133,13 +138,13 @@
                             <input
                                     type="text"
                                     id="paymentMethodAdd"
-                                    name="paymentMethod"
+                                    name="payment_method"
                                     class="form-control"
                                     placeholder="Espèce"/>
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="datePaymentAdd" class="col-form-label"> Date de paiement</label>
-                            <input class="form-control" name="datePayement" type="date" value="2021-06-18"
+                            <input class="form-control" name="date_payment" type="date" value="2021-06-18"
                                    id="datePaymentAdd"/>
                         </div>
 
@@ -172,6 +177,11 @@
                         </div>
                         <form id="outageDetailForm{{ outage.id }}" method="post" class="row g-3"
                               action="#">
+                            <input
+                                        type="hidden"
+                                        id="tenantAdd"
+                                        name="tenant"
+                                        value="{{ tenant.id }}"/>
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="carSelect">Véhicule</label>
                                 <select name="car" class="form-select" id="carSelect"
@@ -224,7 +234,7 @@
                                 <input
                                         type="text"
                                         id="paymentMethodAdd"
-                                        name="paymentMethod"
+                                        name="payment_method"
                                         class="form-control"
                                         value="{{ outage.payment_method }}"
                                         disabled
@@ -234,7 +244,7 @@
                                 <label for="datePaymentAdd" class="col-form-label"> Date de paiement</label>
                                 <input
                                         class="form-control"
-                                        name="datePayement"
+                                        name="date_payement"
                                         type="date"
                                         value="{{ outage.date_payment }}"
                                         disabled

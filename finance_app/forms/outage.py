@@ -7,7 +7,7 @@ class OutageForm(forms.ModelForm):
 
 	class Meta:
 		model = Outage
-		fields = ["amount", "payment_method", "date_payment", "driver", "car", "reason", "location", "is_okay"]
+		fields = ["tenant", "amount", "payment_method", "date_payment", "driver", "car", "reason", "location", "is_okay"]
 
 	def clean(self):
 		cleaned_data = super().clean()
