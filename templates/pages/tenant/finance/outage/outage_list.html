@@ -48,11 +48,11 @@
                                 <td>Non</td>
                             {% endif %}
                             <td>
-                                <a href="#outageDetails{{ outage.id }}"
+                                <a href="#outageDetails{{ outage.id }}" data-bs-toggle="modal" data-bs-target="#outageDetails{{ outage.id }}"
                                    style="color: gray" class="dropdown-notifications-archive"
                                 ><span class="ti ti-eye"></span
                                 ></a>
-                                <a href="#outageUpdate{{ outage.id }}"
+                                <a href="#outageUpdate{{ outage.id }}" data-bs-toggle="modal" data-bs-target="#outageUpdate{{ outage.id }}"
                                    style="color: blue" class="dropdown-notifications-archive"
                                 ><span class="ti ti-edit-circle"></span
                                 ></a>
