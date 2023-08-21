@@ -1,0 +1,116 @@
+{% extends 'bases/tenant/base.html' %}
+{% load static %}
+
+{% block typeJs %}
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+ {% endblock %}
+
+    <!-- Content -->
+ {% block tenant_content %}
+  <div class="container-xxl flex-grow-1 container-p-y">
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de finance /</span> Gestion de vidanges</h4>
+       <hr class="my-5" />
+   <h5>Modifier cette vidange  </h5>
+
+              <hr class="my-5" />
+
+              <!-- Responsive Datatable -->
+              <form id="updateContractForm" method="post" class="row g-3" action="{% url 'core:tenant:finance:update_tenant_oil_change' tenant=unique_domain type_id=object.id %}">
+                  {% csrf_token %}
+                 <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Véhicule</label>
+                            <select name="car" class="form-select" id="exampleFormControlSelect1"
+                                    aria-label="Default select example">
+                                {% for car in cars %}
+                                    <option value="{{ car.id }}">{{ car.matriculation }}</option>
+                                {% endfor %}
+                            </select>
+                         </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Type de carburant</label>
+                            <input
+                              type="text"
+                              id="modalAddressLastName"
+                              name="oil_type"
+                              class="form-control"
+                              value="{{ object.oil_type }}" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Centre de service</label>
+                            <input
+                              type="text"
+                              id="modalAddressLastName"
+                              name="service_center"
+                              class="form-control"
+                              value="{{ object.service_center }}" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Montant</label>
+                            <input
+                              type="number"
+                              id="modalAddressLandmark"
+                              name="amount"
+                              class="form-control"
+                              value="{{ object.amount }}" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressCity">Méthode de paiement </label>
+                            <input
+                              type="text"
+                              id="modalAddressCity"
+                              name="payment_method"
+                              class="form-control"
+                              value="{{ object.payment_method }}" />
+                          </div>
+                        <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date de paiement</label>
+                            <div class="col-md-10">
+                              <input class="form-control" name="date_payment" type="datetime-local" value="{{ object.date_payment }}" id="html5-date-input" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date de vidange </label>
+                            <div class="col-md-10">
+                              <input class="form-control" name="date_OilChange" type="datetime-local" value="{{ object.date_OilChange }}" id="html5-date-input" />
+                            </div>
+                      </div>
+                         <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Prochaine date de vidange </label>
+                            <div class="col-md-10">
+                              <input class="form-control" name="date_next_oil_change" type="datetime-local" value="{{ object.date_next_oil_change }}" id="html5-date-input" />
+                            </div>
+                      </div>
+
+                    <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Modifier</button>
+                            <button
+                              type="reset"
+                              class="btn btn-label-secondary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                              Annuler
+                            </button>
+                          </div>
+
+              </form>
+              <!--/ Responsive Datatable -->
+  </div>
+
+ {% endblock %}
+
+
+ {% block befMain %}
+    <!-- Vendors JS -->
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <!-- Flat Picker -->
+    <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+ {% endblock %}
+
+
+  {% block afMain %}
+    <!-- Page JS -->
+    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+  {% endblock %}

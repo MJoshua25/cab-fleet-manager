@@ -10,15 +10,15 @@
     <!-- Content -->
  {% block tenant_content %}
   <div class="container-xxl flex-grow-1 container-p-y">
-       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de finance /</span> Gestion de vidanges</h4>
        <hr class="my-5" />
-   <h5>Détails de contrat</h5>
+   <h5>Détails de vidange</h5>
 
               <hr class="my-5" />
 
               <!-- Responsive Datatable -->
               <form id="addContractForm" class="row g-3">
-                   <div class="col-12 col-md-6">
+                     <div class="col-12 col-md-6">
                             <label class="form-label" for="modalAddressLastName">Véhicule</label>
                             <select name="car" class="form-select" id="exampleFormControlSelect1"
                                     disabled aria-label="Default select example">
@@ -28,48 +28,63 @@
                             </select>
                          </div>
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalAddressLastName">Compagnie d'assurance</label>
+                            <label class="form-label" for="modalAddressLastName">Type de carburant</label>
                             <input
                               type="text"
                               disabled
                               id="modalAddressLastName"
-                              name="insurance_company"
+                              name="oil_type"
                               class="form-control"
-                              placeholder="BNI" />
+                              value="{{ object.oil_type }}" />
                           </div>
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalAddressLandmark">Montant mensuel </label>
+                            <label class="form-label" for="modalAddressLastName">Centre de service</label>
+                            <input
+                              type="text"
+                              disabled
+                              id="modalAddressLastName"
+                              name="service_center"
+                              class="form-control"
+                              value="{{ object.service_center }}" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Montant</label>
                             <input
                               type="number"
                               disabled
                               id="modalAddressLandmark"
-                              name="monthly_amount"
+                              name="amount"
                               class="form-control"
-                              placeholder="12400" />
+                              value="{{ object.amount }}" />
                           </div>
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalAddressCity">Dernier paiement </label>
+                            <label class="form-label" for="modalAddressCity">Méthode de paiement </label>
                             <input
-                              type="number"
+                              type="text"
                               disabled
                               id="modalAddressCity"
-                              name="last_payment"
+                              name="payment_method"
                               class="form-control"
-                              placeholder="12344444" />
+                              value="{{ object.payment_method }}" />
                           </div>
                         <div class="col-12 col-md-6">
-                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date d'échéance paiement</label>
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date de paiement</label>
                             <div class="col-md-10">
-                              <input class="form-control" disabled name="due_date" type="datetime-local" value="2021-06-18" id="html5-date-input" />
+                              <input class="form-control" disabled name="date_payment" type="datetime-local" value="{{ object.date_payment }}" id="html5-date-input" />
                             </div>
                         </div>
-                         <div class="col-12 col-md-6">
-                        <label for="html5-date-input" class="col-md-2 col-form-label"> Prochaine date paiement </label>
-                        <div class="col-md-10">
-                          <input class="form-control" disabled name="next_date" type="datetime-local" value="2021-06-18" id="html5-date-input" />
-                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Date de vidange </label>
+                            <div class="col-md-10">
+                              <input class="form-control" disabled name="date_OilChange" type="datetime-local" value="{{ object.date_OilChange }}" id="html5-date-input" />
+                            </div>
                       </div>
-
+                         <div class="col-12 col-md-6">
+                            <label for="html5-date-input" class="col-md-2 col-form-label"> Prochaine date de vidange </label>
+                            <div class="col-md-10">
+                              <input class="form-control" name="date_next_oil_change" disabled type="datetime-local" value="{{ object.date_next_oil_change }}" id="html5-date-input" />
+                            </div>
+                      </div>
               </form>
               <!--/ Responsive Datatable -->
   </div>

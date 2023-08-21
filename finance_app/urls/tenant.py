@@ -22,4 +22,11 @@ urlpatterns = [
 	path('panne', tenant.OutageListView.as_view(), name='outage_list'),
 	path('panne/<int:outage_id>/modifier/', tenant.OutageUpdateView.as_view(), name='outage_update'),
 	path('panne/<int:outage_id>/supprimer/', tenant.OutageDeleteView.as_view(), name='outage_delete'),
+  # Urls OilChange
+  path('vidange', tenant.OilChangeListView.as_view(), name='oil_change_list'),
+  path('vidange/ajout_vidange', tenant.add_oil_change, name='add_tenant_oil_change'),
+  path('vidange/<int:pk>', tenant.OilChangeDetailView.as_view(), name='oil_change_detail'),
+  path('vidange/modif_vidange/<int:pk>', tenant.OilChangeUpdateView.as_view(), name='oil_change_update'),
+  path('vidange/modifier_vidange/<int:type_id>', tenant.update_oil_change, name='update_tenant_oil_change'),
+  path('vidange/supprimer_vidange/<int:type_id>', tenant.delete_oil_change, name='delete_tenant_oil_change'),
 ]
