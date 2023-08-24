@@ -252,6 +252,58 @@ def delete_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
 	return redirect('core:tenant:finance:insurance_payment_list', tenant=tenant.unique_domain)
 
 
+class OutageListView(TenantAwareViewMixin, ListView):
+	template_name = 'pages/tenant/finance/outage/outage_list.html'
+	form_class = finance_app_forms.outage.OutageForm
+
+	def get_queryset(self):
+		return fleet_models.Outage.objects.filter(statut=True, tenant=self.tenant).order_by('is_okay', '-date_payment')
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context["drivers"] = fleet_models.Driver.objects.filter(statut=True, tenant=self.tenant)
+		context["cars"] = fleet_models.Car.objects.filter(statut=True, tenant=self.tenant)
+		context["reasons"] = fleet_models.OutageReason.objects.filter(statut=True)
+		context["tenant"] = self.tenant
+		return context
+
+	def post(self, request, *args, **kwargs):
+		form = self.form_class(request.POST)
+		if form.is_valid():
+			outage = form.save()
+		return self.get(request, *args, **kwargs)
+
+
+class OutageUpdateView(TenantAwareViewMixin, View):
+	form_class = finance_app_forms.outage.OutageForm
+
+	def post(self, request, *args, **kwargs):
+		outage_id = kwargs.get('outage_id', None)
+		if not outage_id:
+			return redirect('core:tenant:finance:outage_list')
+		outage = fleet_models.Outage.objects.filter(pk=outage_id).first()
+		if not outage:
+			return redirect('core:tenant:finance:outage_list')
+		form = self.form_class(request.POST, instance=outage)
+		if form.is_valid():
+			form.save()
+		return redirect('core:tenant:finance:outage_list')
+
+
+class OutageDeleteView(TenantAwareViewMixin, View):
+
+	def get(self, request, *args, **kwargs):
+		outage_id = kwargs.get('outage_id', None)
+		if not outage_id:
+			return redirect('core:tenant:finance:outage_list')
+		outage = fleet_models.Outage.objects.filter(pk=outage_id).first()
+		if not outage:
+			return redirect('core:tenant:finance:outage_list')
+		outage.delete()
+		return redirect('core:tenant:finance:outage_list')
+
+
+
 class OilChangeListView(TenantAwareViewMixin, ListView):
 	template_name = 'pages/tenant/finance/oil_change_list.html'
 
