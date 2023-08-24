@@ -8,6 +8,8 @@ from typing import TYPE_CHECKING, Union
 from django.db import transaction
 import secrets
 import string
+from django.conf import settings
+from django.core.mail import send_mail
 from django.contrib import messages
 
 if TYPE_CHECKING:
@@ -64,6 +66,8 @@ class UserListView(TenantAwareViewMixin, ListView):
 def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
     u_tenant: 'Tenant' = request.user.profile.tenant
     tenant = u_tenant
+    subject = 'Bienvenue sur Fleet-Wise'
+    email_from = settings.EMAIL_HOST_USER
     if request.method == "POST":
         last_name = request.POST.get('last_name')
         first_name = request.POST.get('first_name')
@@ -72,6 +76,17 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
         contact = request.POST.get('contact')
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for i in range(20))
+        message = "Cher(e) Mr/Mme, " \
+                  "Nous sommes ravis de vous accueillir dans notre Application de Gestion de Flotte ! Votre compte a été créé avec succès et vous êtes prêt(e) à commencer à gérer efficacement votre flotte de véhicules. " \
+                  "Voici vos informations de connexion :" \
+                  "Mot de passe : [ " + password + "]." \
+                  "Nous vous recommandons vivement de changer votre mot de passe dès votre première connexion pour des raisons de sécurité." \
+                  "Nous vous remercions de faire confiance à notre application pour la gestion de votre flotte. " \
+                  "Nous sommes impatients de vous aider à optimiser vos opérations et à tirer le meilleur parti de notre solution." \
+                  "Bienvenue à bord !" \
+                  "Cordialement," \
+                  "L'équipe de Fllet-WIse"
+        recipient_list = [email]
         u = fleet_app_models.User(
             first_name=first_name,
             last_name=last_name,
@@ -89,6 +104,7 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
             u.save()
             fleet_user.save()
 
+        send_mail(subject, message, email_from, recipient_list)
         messages.success(request, "Vous venez d'ajouter un utilisateur ")
         return redirect("core:tenant:user_management", tenant=tenant.unique_domain)
     else:
