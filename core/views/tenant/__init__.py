@@ -5,6 +5,7 @@ from tenant.mixin import TenantAwareViewMixin
 from django.views.generic import ListView, DetailView
 from fleet_app import models as fleet_app_models
 from typing import TYPE_CHECKING, Union
+from django.db import transaction
 import secrets
 import string
 
@@ -63,16 +64,16 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
     u_tenant: 'Tenant' = request.user.profile.tenant
     tenant = u_tenant
     if request.method == "POST":
-        lastname = request.POST.get('lastname')
-        firstname = request.POST.get('firstname')
+        last_name = request.POST.get('last_name')
+        first_name = request.POST.get('first_name')
         username = request.POST.get('username')
         email = request.POST.get('email')
-        contact = request.POST.get('tel')
+        contact = request.POST.get('contact')
         alphabet = string.ascii_letters + string.digits
         password = ''.join(secrets.choice(alphabet) for i in range(20))
         u = fleet_app_models.User(
-            first_name=firstname,
-            last_name=lastname,
+            first_name=first_name,
+            last_name=last_name,
             username=username,
             email=email,
             password=password
@@ -82,7 +83,10 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
             tenant=tenant,
             contact=contact,
         )
-        fleet_user.save()
+        with transaction.atomic():
+            u.set_password(u.password)
+            u.save()
+            fleet_user.save()
 
         return redirect("core:tenant:user_management", tenant=tenant.unique_domain)
     else:
