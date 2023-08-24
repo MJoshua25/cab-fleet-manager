@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Union
 from django.db import transaction
 import secrets
 import string
+from django.contrib import messages
 
 if TYPE_CHECKING:
     from tenant.models import Tenant
@@ -88,9 +89,11 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
             u.save()
             fleet_user.save()
 
+        messages.success(request, "Vous venez d'ajouter un utilisateur ")
         return redirect("core:tenant:user_management", tenant=tenant.unique_domain)
     else:
-        return redirect("core:tenant:user_management")
+        messages.error(request, "Ajout d'utilisateur non éffectué ")
+        return redirect("core:tenant:user_management", tenant=tenant.unique_domain)
 
 
 def delete_user(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse:
@@ -98,5 +101,6 @@ def delete_user(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse
     tenant = tenant
     fleet_user = fleet_app_models.FleetUser.objects.filter(statut=True, id=type_id)[:1].get()
     fleet_user.delete()
+    messages.success(request, "Suppression d'un utilisateur éffectué")
     return redirect('core:tenant:user_management', tenant=tenant.unique_domain)
 
