@@ -8,7 +8,7 @@ from tenant import models as tenant_models
 from django.db import transaction
 from django.utils import timezone
 from fleet_app import forms as fleet_forms
-
+from django.contrib import messages
 from typing import TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
@@ -35,8 +35,11 @@ class CarListView(TenantAwareViewMixin, ListView):
                 tenant=self.tenant
             )
             car.save()
-
-        return self.get(request, *args, **kwargs)
+            messages.success(request, "Ajout de véhicule éffectué")
+            return self.get(request, *args, **kwargs)
+        else:
+            messages.error(request, "Ajout de véhicule non éffectué")
+            return self.get(request, *args, **kwargs)
 
 
 class CarDetailView(TenantAwareViewMixin, DetailView):
@@ -64,6 +67,7 @@ def update_vehicule(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
     tenant = u_tenant
 
     if request.method != "POST":
+        messages.error(request, "Modification de véhicule non éffectuée")
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
     # Getting datas from the form
@@ -85,7 +89,7 @@ def update_vehicule(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
         car.on_service = False
 
     car.save()
-
+    messages.success(request, "Modification de véhicule éffectuée")
     return redirect('core:tenant:fleet:car_list', tenant=tenant.unique_domain)
 
 
@@ -94,6 +98,7 @@ def delete_vehicule(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
     tenant = tenant
     car = fleet_models.Car.objects.filter(statut=True, id=type_id)[:1].get()
     car.delete()
+    messages.success(request, "Suppression de véhicule éffectuée")
     return redirect('core:tenant:fleet:car_list', tenant=tenant.unique_domain)
 
 
@@ -132,9 +137,10 @@ def add_driver(request: HttpRequest, tenant: str) -> HttpResponse:
             tenant=tenant
         )
         driver.save()
-
+        messages.success(request, "Ajout de conducteur éffectué")
         return redirect('core:tenant:fleet:driver_list', tenant=tenant.unique_domain)
     else:
+        messages.error(request, "Ajout de conducteur non éffectué")
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
 
@@ -153,6 +159,7 @@ def update_driver(request: HttpRequest, tenant: str, type_id: int) -> HttpRespon
     tenant = u_tenant
 
     if request.method != "POST":
+        messages.error(request, "Modification de conducteur non éffectuée")
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
     # Getting datas from the form
@@ -170,7 +177,7 @@ def update_driver(request: HttpRequest, tenant: str, type_id: int) -> HttpRespon
     driver.license_number = license_number
     driver.driver_license = driver_license
     driver.save()
-
+    messages.success(request, "Modification de conducteur éffectuée")
     return redirect('core:tenant:fleet:driver_list', tenant=tenant.unique_domain)
 
 
@@ -179,6 +186,7 @@ def delete_driver(request: HttpRequest, tenant: str, type_id: int) -> HttpRespon
     tenant = tenant
     driver = fleet_models.Driver.objects.filter(statut=True, id=type_id)[:1].get()
     driver.delete()
+    messages.success(request, "Suppression de conducteur non éffectuée")
     return redirect('core:tenant:fleet:driver_list', tenant=tenant.unique_domain)
 
 
@@ -236,9 +244,10 @@ def add_contract(request: HttpRequest, tenant: str) -> HttpResponse:
         for day in rest_days:
             contrat.rest_days.add(day)
         contrat.save()
-
+        messages.success(request, "Ajout de contrat éffectué")
         return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
     else:
+        messages.error(request, "Ajout de contrat non éffectué")
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
 
@@ -259,6 +268,7 @@ def update_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
     tenant = u_tenant
 
     if request.method != "POST":
+        messages.error(request, "Modification de contrat non éffectuée")
         return redirect("core:tenant", tenant=tenant.unique_domain)
 
     # Getting datas from the form
@@ -285,7 +295,7 @@ def update_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
     for day in rest_days:
         contract.rest_days.add(day)
     contract.save()
-
+    messages.success(request, "Modification de contrat éffectuée")
     return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
 
 
@@ -294,4 +304,5 @@ def delete_contract(request: HttpRequest, tenant: str, type_id: int) -> HttpResp
     tenant = tenant
     contract = fleet_models.Contract.objects.filter(statut=True, id=type_id)[:1].get()
     contract.delete()
+    messages.success(request, "Suppression de contrat éffectuée")
     return redirect('core:tenant:fleet:contract_list', tenant=tenant.unique_domain)
