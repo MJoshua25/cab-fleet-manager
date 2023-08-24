@@ -13,8 +13,28 @@
  {% block tenant_content %}
      <div class="container-xxl flex-grow-1 container-p-y">
          <!-- Users List Table -->
+         {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "SUCCESS" %}
+                        <div id="alert"   class="col-lg-12 col-md-12 col-sm-12">
+                           <div class="alert alert-success"  role="alert">
+                              <strong>{{ message.tags }}</strong> {{ message }}
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                        </div>
+                    {% else %}
+                        <div id="alert"   class="col-lg-12 col-md-12 col-sm-12">
+                           <div class="alert alert-danger"  role="alert">
+                              <strong>{{ message.tags }}</strong> {{ message }}
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                           </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+         {% endif %}
           <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
            <hr class="my-5" />
+
            <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewVehicule">
              <div style="align-items: center;">
                 <i class="mb-3 ti ti-plus">Ajouter un utilisateur</i>
@@ -27,6 +47,7 @@
                   <table class="datatables-users table border-top">
                     <thead>
                       <tr>
+                        <th>N°</th>
                         <th>Nom</th>
                         <th>Prénoms</th>
                         <th>Username</th>
@@ -37,6 +58,7 @@
                     </thead>
                       {% for us in object_list %}
                       <tr>
+                          <th scope="row">{{ forloop.counter }}</th>
                           <td>{{ us.user.last_name }}</td>
                           <td>{{ us.user.first_name }}</td>
                           <td>{{ us.user.username }}</td>
@@ -149,3 +171,13 @@
     <!-- Page JS -->
     <script src="{% static 'application/js/app-user-list.js' %}"></script>
   {% endblock %}
+
+  {% block notification_script %}
+    <script>
+    {% if messages %}
+        {% for message in messages %}
+            $('#alert-{{forloop.counter }}').toast('show');
+        {% endfor %}
+    {% endif %}
+    </script>
+ {% endblock %}
