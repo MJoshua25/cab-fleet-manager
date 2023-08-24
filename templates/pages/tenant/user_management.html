@@ -13,15 +13,16 @@
  {% block tenant_content %}
      <div class="container-xxl flex-grow-1 container-p-y">
          <!-- Users List Table -->
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+           <hr class="my-5" />
+           <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewVehicule">
+             <div style="align-items: center;">
+                <i class="mb-3 ti ti-plus">Ajouter un utilisateur</i>
+             </div>
+           </button>
+          <br> <br>
               <div class="card">
-                <div class="card-header border-bottom">
-                  <h5 class="card-title mb-3">Search Filter</h5>
-                  <div class="d-flex justify-content-between align-items-center row pb-2 gap-3 gap-md-0">
-                    <div class="col-md-4 user_role"></div>
-                    <div class="col-md-4 user_plan"></div>
-                    <div class="col-md-4 user_status"></div>
-                  </div>
-                </div>
+
                 <div class="card-datatable table-responsive">
                   <table class="datatables-users table border-top">
                     <thead>
@@ -50,80 +51,82 @@
                        {% endfor %}
                   </table>
                 </div>
-                <!-- Offcanvas to add new user -->
-                <div
-                  class="offcanvas offcanvas-end"
-                  tabindex="-1"
-                  id="offcanvasAddUser"
-                  aria-labelledby="offcanvasAddUserLabel">
-                  <div class="offcanvas-header">
-                    <h5 id="offcanvasAddUserLabel" class="offcanvas-title">Add User</h5>
-                    <button
-                      type="button"
-                      class="btn-close text-reset"
-                      data-bs-dismiss="offcanvas"
-                      aria-label="Close"></button>
-                  </div>
-                  <div class="offcanvas-body mx-0 flex-grow-0 pt-0 h-100">
-                    <form class="add-new-user pt-0" id="addNewUserForm" method="post" action="{% url 'core:tenant:add_tenant_user' tenant=unique_domain %}">
-                      <div class="mb-3">
-                        <label class="form-label" for="add-user-fullname">Nom</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-user-fullname"
-                          placeholder="John Doe"
-                          name="last_name"
-                          aria-label="John Doe" />
-                      </div>
-                       <div class="mb-3">
-                        <label class="form-label" for="add-user-fullname">Prénoms</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-user-fullname"
-                          placeholder="John Doe"
-                          name="first_name"
-                          aria-label="John Doe" />
-                      </div>
-                       <div class="mb-3">
-                        <label class="form-label" for="add-user-fullname">Username</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="add-user-fullname"
-                          placeholder="John Doe"
-                          name="username"
-                          aria-label="John Doe" />
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label" for="add-user-email">Email</label>
-                        <input
-                          type="text"
-                          id="add-user-email"
-                          class="form-control"
-                          placeholder="john.doe@example.com"
-                          aria-label="john.doe@example.com"
-                          name="email" />
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label" for="add-user-contact">Contact</label>
-                        <input
-                          type="text"
-                          id="add-user-contact"
-                          class="form-control phone-mask"
-                          placeholder="+225 8788990044"
-                          aria-label="john.doe@example.com"
-                          name="userContact" />
-                      </div>
-                      <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
-                      <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-                    </form>
-                  </div>
-                </div>
+
               </div>
      </div>
+     <!-- Add New user Modal -->
+                <div class="modal fade" id="addNewVehicule" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+                    <div class="modal-content p-3 p-md-5">
+                      <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                          <h3 class="address-title mb-2">Ajouter un utilisateur</h3>
+                        </div>
+                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:add_tenant_user' tenant=unique_domain %}">
+                            {% csrf_token %}
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalCarVehicule">Nom</label>
+                            <input
+                              type="text"
+                              id="modalAddressFirstName"
+                              name="last_name"
+                              class="form-control"
+                              placeholder="Koffi" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLastName">Prénoms</label>
+                            <input
+                              type="text"
+                              id="modalAddressLastName"
+                              name="first_name"
+                              class="form-control"
+                              placeholder="Grégoire Ange" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressLandmark">Username</label>
+                            <input
+                              type="text"
+                              id="modalAddressLandmark"
+                              name="username"
+                              class="form-control"
+                              placeholder="Gregou" />
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <label class="form-label" for="modalAddressCity">Email</label>
+                            <input
+                              type="text"
+                              id="modalAddressCity"
+                              name="email"
+                              class="form-control"
+                              placeholder="ange@mail.com" />
+                          </div>
+                          <div class="col-12">
+                            <label class="form-label" for="modalAddressCity">Contact</label>
+                            <input
+                              type="text"
+                              id="modalAddressCity"
+                              name="contact"
+                              class="form-control"
+                              placeholder="+225 0102725644" />
+                          </div>
 
+                          <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Ajouter</button>
+                            <button
+                              type="reset"
+                              class="btn btn-label-secondary"
+                              data-bs-dismiss="modal"
+                              aria-label="Close">
+                              Annuler
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--/ Add New vehicule -->
 
 
  {% endblock %}
