@@ -9,7 +9,7 @@ from django.db import transaction
 import secrets
 import string
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib import messages
 
 if TYPE_CHECKING:
@@ -85,7 +85,7 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
                   "Nous sommes impatients de vous aider à optimiser vos opérations et à tirer le meilleur parti de notre solution." \
                   "Bienvenue à bord !" \
                   "Cordialement," \
-                  "L'équipe de Fllet-WIse"
+                  "L'équipe de Fleet-WIse"
         recipient_list = [email]
         u = fleet_app_models.User(
             first_name=first_name,
@@ -98,14 +98,16 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
             user=u,
             tenant=tenant,
             contact=contact,
+            is_new=True
         )
+        print("Fleet :", fleet_user.is_new)
         with transaction.atomic():
             u.set_password(u.password)
             u.save()
             fleet_user.save()
 
-        send_mail(subject, message, email_from, recipient_list)
-        messages.success(request, "Vous venez d'ajouter un utilisateur ")
+        send_mail(subject, message, email_from, recipient_list, fail_silently=False,)
+        messages.success(request, "Ajout d'utilisateur éffectué")
         return redirect("core:tenant:user_management", tenant=tenant.unique_domain)
     else:
         messages.error(request, "Ajout d'utilisateur non éffectué ")
@@ -116,7 +118,7 @@ def delete_user(request: HttpRequest, tenant: str, type_id: int) -> HttpResponse
     tenant: 'Tenant' = request.user.profile.tenant
     tenant = tenant
     fleet_user = fleet_app_models.FleetUser.objects.filter(statut=True, id=type_id)[:1].get()
-    fleet_user.delete()
+    fleet_user.user.delete()
     messages.success(request, "Suppression d'un utilisateur éffectué")
     return redirect('core:tenant:user_management', tenant=tenant.unique_domain)
 

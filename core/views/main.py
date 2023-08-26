@@ -5,6 +5,7 @@ from fleet_app import models as fleet_models
 from django.db import transaction
 from tenant.decorators import no_tenant_required
 from core import models
+from django.contrib import messages
 
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 
@@ -82,8 +83,13 @@ def login(request):
             )
             if user is not None and hasattr(user, 'profile'):
                 auth_login(request, user)
-                tenant = user.profile.tenant
-                return redirect('core:tenant:home', tenant=tenant.unique_domain)
+                print('CO : ', user.profile.is_new)
+                if user.profile.is_new:
+                    print('CO1 : ', user.profile.is_new)
+                    return redirect('core:change_password')
+                else:
+                    tenant = user.profile.tenant
+                    return redirect('core:tenant:home', tenant=tenant.unique_domain)
     data = {
         'titre': "page de connexion",
         # 'cats': models.Categorie.objects.filter(status=True)
@@ -97,6 +103,30 @@ def validate_domain(request):
         'is_taken': tenant_models.Tenant.objects.filter(unique_domain=unique_domain).exists()
     }
     return JsonResponse(data)
+
+
+def change_password(request: HttpRequest) -> HttpResponse:
+    data = {
+    }
+    print("ended")
+    return render(request, 'pages/update_password.html', data)
+
+
+def change_password_user(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        user = request.user
+        password = request.POST.get('password')
+        comfirmpassword = request.POST.get('comfirmpassword')
+        if password != comfirmpassword:
+            messages.error(request, "Mot de passe non identique")
+            return redirect("core:home")
+        else:
+            tenant = user.profile.tenant
+            user.set_password(password)
+            user.profile.is_new = False
+            user.save()
+            print("Update :", user.profile.is_new)
+            return redirect("core:login")
 
 
 def logout(request):
