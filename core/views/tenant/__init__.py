@@ -106,7 +106,7 @@ def add_new_user(request: HttpRequest, tenant: str) -> HttpResponse:
             u.save()
             fleet_user.save()
 
-        send_mail(subject, message, email_from, recipient_list, fail_silently=False,)
+        send_mail(subject, message, email_from, recipient_list, fail_silently=False)
         messages.success(request, "Ajout d'utilisateur éffectué")
         return redirect("core:tenant:user_management", tenant=tenant.unique_domain)
     else:

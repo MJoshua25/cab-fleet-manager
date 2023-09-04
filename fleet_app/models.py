@@ -14,6 +14,7 @@ class FleetUser(TenantAwareModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     contact = models.CharField(max_length=10)
     is_new = models.BooleanField(default=False)
+    token_forget_password = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = "FleetUser"
