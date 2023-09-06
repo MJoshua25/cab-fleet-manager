@@ -11,6 +11,25 @@
 <!-- Content -->
 {% block tenant_content %}
     <div class="container-xxl flex-grow-1 container-p-y">
+        {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == "SUCCESS" %}
+                        <div id="alert"   class="col-lg-12 col-md-12 col-sm-12">
+                           <div class="alert alert-success"  role="alert">
+                              <strong>{{ message.tags }}</strong> {{ message }}
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                        </div>
+                    {% else %}
+                        <div id="alert"   class="col-lg-12 col-md-12 col-sm-12">
+                           <div class="alert alert-danger"  role="alert">
+                              <strong>{{ message.tags }}</strong> {{ message }}
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                           </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+         {% endif %}
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de la flotte /</span> Gestion des
             contrats </h4>
         <hr class="my-5"/>
@@ -27,6 +46,7 @@
                 <table class="dt-responsive table">
                     <thead>
                     <tr>
+                        <th>N°</th>
                         <th>Conducteur</th>
                         <th>Voiture</th>
                         <th>Actif</th>
@@ -38,6 +58,7 @@
                     </thead>
                     {% for contract in object_list %}
                         <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
                             <td>{{ contract.driver.last_name }}</td>
                             <td>{{ contract.car.matriculation }}</td>
                             {% if contract.is_active %}
@@ -174,3 +195,13 @@
     <!-- Page JS -->
     <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
 {% endblock %}
+
+  {% block notification_script %}
+    <script>
+    {% if messages %}
+        {% for message in messages %}
+            $('#alert-{{forloop.counter }}').toast('show');
+        {% endfor %}
+    {% endif %}
+    </script>
+ {% endblock %}

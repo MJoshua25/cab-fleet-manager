@@ -4,13 +4,16 @@
 {% block typeJs %}
     <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
     <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-    <link rel="stylesheet" href="{% static 'application/vendor/libs/flatpickr/flatpickr.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/select2/select2.css' %}" />
+    <link rel="stylesheet" href="{% static 'application/vendor/libs/formvalidation/dist/css/formValidation.min.css' %}" />
  {% endblock %}
 
     <!-- Content -->
  {% block tenant_content %}
-  <div class="container-xxl flex-grow-1 container-p-y">
-        {% if messages %}
+     <div class="container-xxl flex-grow-1 container-p-y">
+         <!-- Users List Table -->
+         {% if messages %}
                 {% for message in messages %}
                     {% if message.tags == "SUCCESS" %}
                         <div id="alert"   class="col-lg-12 col-md-12 col-sm-12">
@@ -29,116 +32,105 @@
                     {% endif %}
                 {% endfor %}
          {% endif %}
-       <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
-       <hr class="my-5" />
-      <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewVehicule">
-         <div style="align-items: center;">
-            <i class="mb-3 ti ti-plus">Ajouter un véhicule</i>
-         </div>
-      </button>
-      <br> <br>
-       <!-- Responsive Datatable -->
-       <div class="card">
-                <h5 class="card-header">Gestion des voitures</h5>
+          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Gestion de flotte /</span> Gestion de voiture</h4>
+           <hr class="my-5" />
+
+           <button  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNewVehicule">
+             <div style="align-items: center;">
+                <i class="mb-3 ti ti-plus">Ajouter un utilisateur</i>
+             </div>
+           </button>
+          <br> <br>
+              <div class="card">
+
                 <div class="card-datatable table-responsive">
-                  <table class="dt-responsive table">
+                  <table class="datatables-users table border-top">
                     <thead>
                       <tr>
                         <th>N°</th>
-                        <th>Modèle</th>
-                        <th>Marque</th>
-                        <th>Matricule</th>
-                        <th>Couleur</th>
-                        <th>En service</th>
-                        <th>Action</th>
+                        <th>Nom</th>
+                        <th>Prénoms</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Actions</th>
+                      </tr>
                     </thead>
-                      {% for car in object_list %}
+                      {% for us in object_list %}
                       <tr>
                           <th scope="row">{{ forloop.counter }}</th>
-                          <td>{{ car.model }}</td>
-                          <td>{{ car.brand }}</td>
-                          <td>{{ car.matriculation }}</td>
-                          <td>{{ car.color }}</td>
-                          {% if car.on_service %}
-                              <td> Oui </td>
-                          {% else %}
-                              <td>Non</td>
-                          {% endif %}
+                          <td>{{ us.user.last_name }}</td>
+                          <td>{{ us.user.first_name }}</td>
+                          <td>{{ us.user.username }}</td>
+                          <td>{{ us.user.email }}</td>
+                          <td>{{ us.contact }}</td>
                           <td>
-                              <a href="{% url 'core:tenant:fleet:car_detail' tenant=unique_domain pk=car.id  %}" style="color: gray" class="dropdown-notifications-archive"
-                                ><span class="ti ti-eye"></span
-                              ></a>
-                              <a href="{% url 'core:tenant:fleet:car_update' tenant=unique_domain pk=car.id  %}" style="color: blue" class="dropdown-notifications-archive"
-                                ><span class="ti ti-edit-circle"></span
-                              ></a>
-                              <a href="{% url 'core:tenant:fleet:delete_tenant_vehicule' tenant=unique_domain type_id=car.id  %}" style="color: red" class="dropdown-notifications-archive"
+                              <a href="{% url 'core:tenant:delete_tenant_user' tenant=unique_domain type_id=us.id  %}" style="color: red" class="dropdown-notifications-archive"
                                 ><span class="ti ti-trash"></span
                               ></a>
                           </td>
                       </tr>
-                      {% endfor %}
+                       {% endfor %}
                   </table>
                 </div>
-              </div>
-              <!--/ Responsive Datatable -->
-       </div>
 
-                <!-- Add New vehicule Modal -->
+              </div>
+     </div>
+     <!-- Add New user Modal -->
                 <div class="modal fade" id="addNewVehicule" tabindex="-1" aria-hidden="true">
                   <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
                     <div class="modal-content p-3 p-md-5">
                       <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                          <h3 class="address-title mb-2">Ajouter un véhicule</h3>
+                          <h3 class="address-title mb-2">Ajouter un utilisateur</h3>
                         </div>
-                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:fleet:car_list' tenant=unique_domain %}">
+                        <form id="addNewVehiculeForm" method="post" class="row g-3" action="{% url 'core:tenant:add_tenant_user' tenant=unique_domain %}">
                             {% csrf_token %}
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalCarVehicule">Modèle</label>
+                            <label class="form-label" for="modalCarVehicule">Nom</label>
                             <input
                               type="text"
                               id="modalAddressFirstName"
-                              name="model"
+                              name="last_name"
                               class="form-control"
-                              placeholder="A1 ALLSTREET" />
+                              placeholder="Koffi" />
                           </div>
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalAddressLastName">Marque</label>
+                            <label class="form-label" for="modalAddressLastName">Prénoms</label>
                             <input
                               type="text"
                               id="modalAddressLastName"
-                              name="brand"
+                              name="first_name"
                               class="form-control"
-                              placeholder="Audi" />
+                              placeholder="Grégoire Ange" />
                           </div>
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalAddressLandmark">Matricule</label>
+                            <label class="form-label" for="modalAddressLandmark">Username</label>
                             <input
                               type="text"
                               id="modalAddressLandmark"
-                              name="matriculation"
+                              name="username"
                               class="form-control"
-                              placeholder="1345GA01" />
+                              placeholder="Gregou" />
                           </div>
                           <div class="col-12 col-md-6">
-                            <label class="form-label" for="modalAddressCity">Couleur</label>
+                            <label class="form-label" for="modalAddressCity">Email</label>
                             <input
                               type="text"
                               id="modalAddressCity"
-                              name="color"
+                              name="email"
                               class="form-control"
-                              placeholder="Rouge" />
+                              placeholder="ange@mail.com" />
                           </div>
-                          <div class="col-12 col-md-6">
-                            <label class="switch">
-                              <input type="checkbox" name="on_service" class="switch-input" />
-                              <span class="switch-toggle-slider">
-                                <span class="switch-on"></span>
-                                <span class="switch-off"></span>
-                              </span>
-                              <span class="switch-label">En service</span>
-                            </label>
+                          <div class="col-12">
+                            <label class="form-label" for="modalAddressCity">Contact</label>
+                            <input
+                              type="text"
+                              id="modalAddressCity"
+                              name="contact"
+                              class="form-control"
+                              placeholder="+225 0102725644" />
                           </div>
 
                           <div class="col-12 text-center">
@@ -164,16 +156,20 @@
 
  {% block befMain %}
     <!-- Vendors JS -->
-    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-    <!-- Flat Picker -->
     <script src="{% static 'application/vendor/libs/moment/moment.js' %}"></script>
-    <script src="{% static 'application/vendor/libs/flatpickr/flatpickr.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/select2/select2.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/formvalidation/dist/js/FormValidation.min.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/cleavejs/cleave.js' %}"></script>
+    <script src="{% static 'application/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
  {% endblock %}
 
 
   {% block afMain %}
     <!-- Page JS -->
-    <script src="{% static 'application/js/tables-datatables-advanced.js' %}"></script>
+    <script src="{% static 'application/js/app-user-list.js' %}"></script>
   {% endblock %}
 
   {% block notification_script %}

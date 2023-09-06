@@ -14,6 +14,7 @@ class FleetUserAdmin(admin.ModelAdmin):
         'tenant',
         'user',
         'contact',
+        'is_new'
     )
     list_filter = (
         'statut',
@@ -23,6 +24,7 @@ class FleetUserAdmin(admin.ModelAdmin):
         'user',
         'id',
         'contact',
+        'is_new'
     )
 
 
