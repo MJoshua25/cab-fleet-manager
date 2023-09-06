@@ -79,7 +79,7 @@
               <h4 class="mb-1 pt-2">Bienvenue sur Fleet-wise! 👋</h4>
               <p class="mb-4">Merci de mettre à jour votre mot de passe</p>
 
-              <form id="formAuthentication" class="mb-3" action="{% url 'core:forget_password_user' token=ft.token_forget_password %}" method="POST">
+              <form id="formAuthentication" class="mb-3" action="{% url 'core:forget_password_user' token=token %}" method="POST">
                 {% csrf_token %}
                   <div class="mb-3">
                   <label for="email" class="form-label">Nouveau mot de passe</label>
