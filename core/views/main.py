@@ -102,17 +102,14 @@ class ForgetPasswordUserView(TemplateView):
 			return self.get(self, request, *args, **kwargs)
 
 		user = self.user
-		print('user', user)
 		profile = user.profile
-		print('profile', user)
-		print("password", password)
 
 		user.set_password(password)
-		print("password set ", user.set_password(password))
-		user.save()
-		print("password set2 ", user.set_password(password))
 		profile.token_forget_password = None
-		profile.save()
+
+		with transaction.atomic():
+			user.save()
+			profile.save()
 
 		messages.success(request, "Mot de passe changé")
 		return redirect("core:login")
