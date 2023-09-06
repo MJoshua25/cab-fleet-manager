@@ -28,40 +28,37 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def forget_password(request: HttpRequest) -> HttpResponse:
-    data = {
-
-    }
-    return render(request, 'pages/forget_password.html', data)
-
-
-def update_password_user(request: HttpRequest) -> HttpResponse:
-    if request.method != "POST":
+    if request.method == "POST":
+        email = request.POST.get('email')
+        token = str(uuid.uuid4())
+        link = f"http://127.0.0.1:8000/change_password_user/{token}"
+        subject = 'Bienvenue sur Fleet-Wise'
+        email_from = settings.EMAIL_HOST_USER
+        message = "Cher(e) Mr/Mme, trouvez ci-dessous le lien pour la réintialisation de votre mot de passe. \n" \
+                  "[" + link + "]" \
+                               "\n Cordialement," \
+                               "L'équipe de Fleet-wise"
+        recipient_list = [email]
+        k = User.objects.get(email=email)
+        print('k', k.email)
+        if not k:
+            print('Pas de mail correspondant')
+            messages.error(request, "Pas de mail correspondant")
+            return redirect('core:login')
+        user_obj = User.objects.get(email=email)
+        print('User', user_obj)
+        profile_obj = fleet_models.FleetUser.objects.get(user=user_obj)
+        print('profile', profile_obj)
+        profile_obj.token_forget_password = token
+        profile_obj.save()
+        send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+        messages.success(request, "Email envoyé")
         return redirect("core:home")
-    email = request.POST.get('email')
-    token = str(uuid.uuid4())
-    link = f"http://127.0.0.1:8000/change_password_user/{token}"
-    subject = 'Bienvenue sur Fleet-Wise'
-    email_from = settings.EMAIL_HOST_USER
-    message = "Cher(e) Mr/Mme, trouvez ci-dessous le lien pour la réintialisation de votre mot de passe. \n" \
-              "[" + link + "]" \
-                           "\n Cordialement," \
-                           "L'équipe de Fleet-wise"
-    recipient_list = [email]
-    k = User.objects.get(email=email)
-    print('k', k.email)
-    if not k:
-        print('Pas de mail correspondant')
-        messages.error(request, "Pas de mail correspondant")
-        return redirect('core:login')
-    user_obj = User.objects.get(email=email)
-    print('User', user_obj)
-    profile_obj = fleet_models.FleetUser.objects.get(user=user_obj)
-    print('profile', profile_obj)
-    profile_obj.token_forget_password = token
-    profile_obj.save()
-    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
-    messages.success(request, "Email envoyé")
-    return redirect("core:home")
+    else:
+        data = {
+
+        }
+        return render(request, 'pages/forget_password.html', data)
 
 
 @no_tenant_required
@@ -174,28 +171,32 @@ def change_password_user(request: HttpRequest) -> HttpResponse:
     return redirect("core:login")
 
 
-def forget_password_user(request: HttpRequest, token) -> HttpResponse:
-    if request.method != "POST":
-        return redirect("core:home")
-    password = request.POST.get('password')
-    comfirm_password = request.POST.get('comfirmpassword')
-    user_id = request.POST.get('user_id')
-    if user_id is None:
-        print("Aucun utilisateur trouvé")
-        return redirect("core:home")
-    if password != comfirm_password:
-        messages.error(request, "Mot de passe non identique")
-        return redirect("core:forget_password", token)
+def forget_password_user(request: HttpRequest, token: str) -> HttpResponse:
+    if request.method == "POST":
+        password = request.POST.get('password')
+        comfirm_password = request.POST.get('comfirmpassword')
+        user_id = request.POST.get('user_id')
+        if user_id is None:
+            print("Aucun utilisateur trouvé")
+            return redirect("core:home")
+        if password != comfirm_password:
+            messages.error(request, "Mot de passe non identique")
+            return redirect("core:forget_password", token)
 
-    profil_obj = fleet_models.FleetUser.objects.filter(token_forget_password=token).first()
-    data = {
-        'user_id': profil_obj.user_id
-    }
-    user_obj = fleet_models.FleetUser.user.objects.get(id=user_id)
-    user_obj.set_password(password)
-    user_obj.save()
-
-    return redirect("core:login", data)
+        profil_obj = fleet_models.FleetUser.objects.filter(token_forget_password=token).first()
+        data = {
+            'user_id': profil_obj.user_id
+        }
+        user_obj = fleet_models.FleetUser.user.objects.get(id=user_id)
+        user_obj.set_password(password)
+        user_obj.save()
+        messages.success(request, "Mot de passe changé")
+        return redirect("core:login", data)
+    else:
+        data = {
+            'ft': fleet_models.FleetUser.objects.filter(statut=True)
+        }
+        return render(request, 'pages/forget_pass.html', data)
 
 
 def logout(request):
