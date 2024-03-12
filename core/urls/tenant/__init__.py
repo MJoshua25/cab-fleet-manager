@@ -10,5 +10,5 @@ urlpatterns = [
 	path('utilisateur/ajout_utilisateur', tenant.add_new_user, name='add_tenant_user'),
 	path('utilisateur/supprimer_utilisateur/<int:type_id>', tenant.delete_user, name='delete_tenant_user'),
 	path('flotte/', include('fleet_app.urls.tenant'), name='fleet'),
-	path('finance/', include('finance_app.urls.tenant'), name='finance'),
+	path('finance/', include('finance_app.urls.tenant'), name='finance')
 ]

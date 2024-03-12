@@ -200,7 +200,7 @@ class ContractListView(TenantAwareViewMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         return context
 
 
@@ -212,7 +212,7 @@ class ContractDetailView(TenantAwareViewMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         return context
 
 
@@ -259,7 +259,7 @@ class ContractUpdateView(TenantAwareViewMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         return context
 
 
