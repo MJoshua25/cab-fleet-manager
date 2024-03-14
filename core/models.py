@@ -37,4 +37,17 @@ class Contact(StandardModel):
         verbose_name_plural = "Contacts"
 
     def __str__(self):
-        return f"{self.full_name} {self.message} "
+        return f"{self.full_name} {self.message}"
+
+
+class Newsletter(StandardModel):
+    full_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=255)
+    entreprise = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = "Contact"
+        verbose_name_plural = "Contacts"
+
+    def __str__(self):
+        return f"{self.full_name} {self.entreprise}"
