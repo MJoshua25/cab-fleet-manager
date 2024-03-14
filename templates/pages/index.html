@@ -248,20 +248,13 @@
                                 <div class="column is-12">
                                     <div class="field">
                                         <div class="control">
-                                            <button type="button" class="
-                            button button-cta
-                            primary-btn
-                            no-lh
-                            is-bold
-                            raised
-                            is-fullwidth
-                          ">
+                                            <button type="button" class="button button-cta primary-btn no-lh is-bold raised is-fullwidth">
                                                 Envoyez
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                              </div>
                             </form>
                         </div>
                     </div>
@@ -323,7 +316,7 @@
             <!-- /Title -->
 
             <div class="content-wrapper giant-pb">
-                <form id="addNewsletter" method="post" class="row g-3" action="{% url 'core:add_contact' %}">
+                <form id="addNewsletter" method="post" class="row g-3" action="{% url 'core:add_newsletter' %}">
                     {% csrf_token %}
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
