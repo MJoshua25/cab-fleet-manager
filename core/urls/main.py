@@ -10,6 +10,8 @@ urlpatterns = [
 
     # Contact
     path('ajout_contact', main.add_contact, name='add_contact'),
+    #Newsletter
+    path('ajout_newsletter', main.add_newsletter, name='add_newsletter'),
     # Gestion des mots de passe oublié
     path('mot_de_passe_oublie', main.ForgetPasswordView.as_view(), name='forget_password'),
     path('change_password_user/<str:token>/', main.ForgetPasswordUserView.as_view(), name='forget_password_user'),
