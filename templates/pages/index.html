@@ -212,16 +212,17 @@
                         <div class="contact-page-form flex-card">
                             <h3>Contactez-nous</h3>
                             <p>Utilisez notre formulaire pour nous laisser un message.</p>
-
-                            <div class="columns is-multiline">
+                            <form id="addContact" method="post" class="row g-3" action="{% url 'core:add_contact' %}">
+                                {% csrf_token %}
+                                <div class="columns is-multiline">
                                 <div class="column is-12">
                                     <div class="field">
                                         <label>Nom & Prénoms</label>
                                         <div class="control has-icons-left">
-                                            <input type="text" class="input is-medium" placeholder="Koffi Ange" />
+                                            <input type="text" class="input is-medium" name="full_name" placeholder="Koffi Ange" />
                                             <span class="icon is-left is-small">
-                          <i class="sl sl-icon-user"></i>
-                        </span>
+                                                <i class="sl sl-icon-user"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -229,10 +230,10 @@
                                     <div class="field">
                                         <label>Email</label>
                                         <div class="control has-icons-left">
-                                            <input type="text" class="input is-medium" placeholder="Koffange@gmail.com" />
+                                            <input type="text" class="input is-medium" name="email" placeholder="Koffange@gmail.com" />
                                             <span class="icon is-left is-small">
-                          <i class="sl sl-icon-envelope-open"></i>
-                        </span>
+                                                <i class="sl sl-icon-envelope-open"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +241,7 @@
                                     <div class="field">
                                         <label>Message</label>
                                         <div class="control">
-                                            <textarea class="textarea" rows="4" placeholder="Bonjour !"></textarea>
+                                            <textarea class="textarea" name="message" rows="4" placeholder="Bonjour !"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -261,6 +262,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
                     </div>
                     <div class="column is-7">
