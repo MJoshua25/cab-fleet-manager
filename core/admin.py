@@ -29,8 +29,30 @@ class ContactAdmin(admin.ModelAdmin):
     )
 
 
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'statut',
+        'date_add',
+        'date_upd',
+        'full_name',
+        'email',
+        'entreprise'
+    )
+    list_filter = (
+        'statut',
+        'date_add',
+        'date_upd',
+        'full_name',
+        'email',
+        'entreprise'
+    )
+
+
 def _register(model, admin_class):
     admin.site.register(model, admin_class)
 
 
 _register(models.DayOfTheWeek, DayOfTheWeekAdmin)
+_register(models.Contact, ContactAdmin)
+_register(models.Newsletter, NewsletterAdmin)
