@@ -37,7 +37,7 @@ class Contact(StandardModel):
         verbose_name_plural = "Contacts"
 
     def __str__(self):
-        return f"{self.full_name} {self.message}"
+        return f"{self.full_name}"
 
 
 class Newsletter(StandardModel):
@@ -46,8 +46,8 @@ class Newsletter(StandardModel):
     entreprise = models.CharField(max_length=50)
 
     class Meta:
-        verbose_name = "Contact"
-        verbose_name_plural = "Contacts"
+        verbose_name = "Newsletter"
+        verbose_name_plural = "Newsletters"
 
     def __str__(self):
         return f"{self.full_name} {self.entreprise}"

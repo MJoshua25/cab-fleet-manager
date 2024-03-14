@@ -199,11 +199,11 @@ def add_contact(request: HttpRequest) -> HttpResponse:
             message=message,
         )
         contact.save()
-        subject = 'Contactez-nous sur Fleet-Wise'
-        email_from = settings.EMAIL_HOST_USER
-        message = message
-        recipient_list = [email]
-        send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+        #subject = 'Contactez-nous sur Fleet-Wise'
+        #email_from = settings.EMAIL_HOST_USER
+        #message = message
+        #recipient_list = [email]
+        #send_mail(subject, message, email_from, recipient_list, fail_silently=False)
         messages.success(request, "Formulaire envoyé")
         return redirect('core:home')
     else:
