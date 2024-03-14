@@ -211,6 +211,24 @@ def add_contact(request: HttpRequest) -> HttpResponse:
         return redirect("core:home")
 
 
+def add_newsletter(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        entreprise = request.POST.get('entreprise')
+        newsletter = core_models.Newsletter(
+            full_name=full_name,
+            email=email,
+            entreprise=entreprise,
+        )
+        newsletter.save()
+        messages.success(request, "Newsletter envoyé")
+        return redirect('core:home')
+    else:
+        messages.error(request, "Newsletter non envoyé")
+        return redirect("core:home")
+
+
 def validate_domain(request):
     unique_domain = request.POST.get('unique_domain', None)
     data = {
