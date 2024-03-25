@@ -212,16 +212,17 @@
                         <div class="contact-page-form flex-card">
                             <h3>Contactez-nous</h3>
                             <p>Utilisez notre formulaire pour nous laisser un message.</p>
-
-                            <div class="columns is-multiline">
+                            <form id="addContact" method="post" class="row g-3" action="{% url 'core:add_contact' %}">
+                                {% csrf_token %}
+                                <div class="columns is-multiline">
                                 <div class="column is-12">
                                     <div class="field">
                                         <label>Nom & Prénoms</label>
                                         <div class="control has-icons-left">
-                                            <input type="text" class="input is-medium" placeholder="Koffi Ange" />
+                                            <input type="text" class="input is-medium" name="full_name" placeholder="Koffi Ange" />
                                             <span class="icon is-left is-small">
-                          <i class="sl sl-icon-user"></i>
-                        </span>
+                                                <i class="sl sl-icon-user"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -229,10 +230,10 @@
                                     <div class="field">
                                         <label>Email</label>
                                         <div class="control has-icons-left">
-                                            <input type="text" class="input is-medium" placeholder="Koffange@gmail.com" />
+                                            <input type="email" class="input is-medium" name="email" placeholder="Koffange@gmail.com" />
                                             <span class="icon is-left is-small">
-                          <i class="sl sl-icon-envelope-open"></i>
-                        </span>
+                                                <i class="sl sl-icon-envelope-open"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -240,27 +241,21 @@
                                     <div class="field">
                                         <label>Message</label>
                                         <div class="control">
-                                            <textarea class="textarea" rows="4" placeholder="Bonjour !"></textarea>
+                                            <textarea class="textarea" name="message" rows="4" placeholder="Bonjour !"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="column is-12">
                                     <div class="field">
                                         <div class="control">
-                                            <button type="button" class="
-                            button button-cta
-                            primary-btn
-                            no-lh
-                            is-bold
-                            raised
-                            is-fullwidth
-                          ">
+                                            <button type="button" class="button button-cta primary-btn no-lh is-bold raised is-fullwidth">
                                                 Envoyez
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                              </div>
+                            </form>
                         </div>
                     </div>
                     <div class="column is-7">
@@ -321,23 +316,24 @@
             <!-- /Title -->
 
             <div class="content-wrapper giant-pb">
-                <form>
+                <form id="addNewsletter" method="post" class="row g-3" action="{% url 'core:add_newsletter' %}">
+                    {% csrf_token %}
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
                             <div class="columns is-vcentered">
                                 <div class="column is-3">
                                     <!-- Form field -->
                                     <div class="control-material is-primary">
-                                        <input class="material-input" type="text" required />
+                                        <input class="material-input" name="full_name" type="text" required />
                                         <span class="material-highlight"></span>
                                         <span class="bar"></span>
-                                        <label>Nom</label>
+                                        <label>Nom & Prénoms</label>
                                     </div>
                                 </div>
                                 <div class="column is-3">
                                     <!-- /Form field -->
                                     <div class="control-material is-primary">
-                                        <input class="material-input" type="text" required />
+                                        <input class="material-input" name="email" type="email" required />
                                         <span class="material-highlight"></span>
                                         <span class="bar"></span>
                                         <label>Email </label>
@@ -346,7 +342,7 @@
                                 <div class="column is-3">
                                     <!-- Form field -->
                                     <div class="control-material is-primary">
-                                        <input class="material-input" type="text" required />
+                                        <input class="material-input" name="entreprise" type="text" required />
                                         <span class="material-highlight"></span>
                                         <span class="bar"></span>
                                         <label>Entreprise </label>

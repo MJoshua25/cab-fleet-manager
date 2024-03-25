@@ -28,7 +28,7 @@ class InsuranceListView(TenantAwareViewMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(tenant=self.tenant, statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         return context
 
 
@@ -41,7 +41,7 @@ def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
     context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-    context["week"] = core_models.DayOfTheWeek.objects.filter(tenant=self.tenant, statut=True)
+    context["week"] = core_models.DayOfTheWeek.objects.filter()
     return context
 
 
@@ -85,7 +85,7 @@ def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
     context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-    context["week"] = core_models.DayOfTheWeek.objects.filter(tenant=self.tenant, statut=True)
+    context["week"] = core_models.DayOfTheWeek.objects.filter()
     return context
 
 
@@ -141,7 +141,7 @@ class InsurancePaymentListView(TenantAwareViewMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         context["insurance"] = fleet_models.Insurance.objects.filter(tenant=self.tenant, statut=True)
         context["contract"] = fleet_models.Contract.objects.filter(tenant=self.tenant, statut=True)
         context["expense"] = finance_models.Expense.objects.filter(tenant=self.tenant, statut=True)
@@ -156,7 +156,7 @@ class InsurancePaymentDetailView(TenantAwareViewMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         context["insurance"] = fleet_models.Insurance.objects.filter(tenant=self.tenant, statut=True)
         context["contract"] = fleet_models.Contract.objects.filter(tenant=self.tenant, statut=True)
         context["expense"] = finance_models.Expense.objects.filter(tenant=self.tenant, statut=True)
@@ -202,7 +202,7 @@ class InsurancePaymentUpdateView(TenantAwareViewMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         context["insurance"] = fleet_models.Insurance.objects.filter(tenant=self.tenant, statut=True)
         context["contract"] = fleet_models.Contract.objects.filter(tenant=self.tenant, statut=True)
         context["expense"] = finance_models.Expense.objects.filter(tenant=self.tenant, statut=True)
@@ -229,7 +229,7 @@ def update_insurance_payment(request: HttpRequest, tenant: str, type_id: int) ->
     else:
         is_sold_out = False
     # Updating the corresponding car object
-    i_payment = fleet_models.InsurancePayment.objects.filter(statut=True, id=type_id)[:1].get()
+    i_payment = fleet_models.InsurancePayment.objects.filter(id=type_id)[:1].get()
     i_payment.amount = amount
     i_payment.payment_method = payment_method
     i_payment.date_payment = datetime.datetime.strptime(date_payment, '%Y-%m-%dT%H:%M').date()
@@ -320,7 +320,7 @@ class OilChangeListView(TenantAwareViewMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(tenant=self.tenant, statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         context["insurance"] = fleet_models.Insurance.objects.filter(tenant=self.tenant, statut=True)
         context["contract"] = fleet_models.Contract.objects.filter(tenant=self.tenant, statut=True)
         context["expense"] = finance_models.Expense.objects.filter(tenant=self.tenant, statut=True)
@@ -335,7 +335,7 @@ class OilChangeDetailView(TenantAwareViewMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(tenant=self.tenant, statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         context["insurance"] = fleet_models.Insurance.objects.filter(tenant=self.tenant, statut=True)
         context["contract"] = fleet_models.Contract.objects.filter(tenant=self.tenant, statut=True)
         context["expense"] = finance_models.Expense.objects.filter(tenant=self.tenant, statut=True)
@@ -380,7 +380,7 @@ class OilChangeUpdateView(TenantAwareViewMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["drivers"] = fleet_models.Driver.objects.filter(tenant=self.tenant, statut=True)
         context["cars"] = fleet_models.Car.objects.filter(tenant=self.tenant, statut=True)
-        context["week"] = core_models.DayOfTheWeek.objects.filter(tenant=self.tenant, statut=True)
+        context["week"] = core_models.DayOfTheWeek.objects.filter()
         context["insurance"] = fleet_models.Insurance.objects.filter(tenant=self.tenant, statut=True)
         context["contract"] = fleet_models.Contract.objects.filter(tenant=self.tenant, statut=True)
         context["expense"] = finance_models.Expense.objects.filter(tenant=self.tenant, statut=True)
