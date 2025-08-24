@@ -189,16 +189,27 @@ DIRECTORY = 'media_cdn/'
 
 FILEBROWSER_MAX_UPLOAD_SIZE = 10485760 * 500
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+	"default": {
+		"BACKEND": "django.core.files.storage.FileSystemStorage",
+	},
+	"staticfiles": {
+		"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+	},
+}
 WHITENOISE_MANIFEST_STRICT = False
+
 # Static AND MEDIA ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100 MB en bytes
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ATOMIC_REQUESTS = True
 
 # Production security toggles
 if not DEBUG:

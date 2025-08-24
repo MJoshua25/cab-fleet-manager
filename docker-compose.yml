@@ -25,7 +25,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file: ./docker/postgres/.env.prod
     ports:
-      - "25432:5432"
+      - "35432:5432"
     restart: unless-stopped
 
   cache:
