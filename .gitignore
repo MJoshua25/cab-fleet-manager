@@ -162,3 +162,14 @@ cython_debug/
 .idea/
 static/.DS_Store
 project.md
+*.env.prod
+database.env
+.DS_store
+
+media_cdn
+static_cdn
+.trae
+/.cursor
+/logs/
+/td/
+/prd/

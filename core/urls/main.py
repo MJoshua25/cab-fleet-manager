@@ -22,5 +22,7 @@ urlpatterns = [
     path('valider_domaine/', main.validate_domain, name='validate_domain'),
     path('deconnexion/', main.logout, name='logout'),
 
+    path('health/', main.health_check, name='health'),
+
     path('<str:tenant>/', include('core.urls.tenant'), name='tenant'),
 ]

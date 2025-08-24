@@ -1,13 +1,22 @@
 #!/bin/sh
 
+set -e
+
+ echo "Environnement: ${DJANGO_ENV:-$env}"
+
 echo "En attente de la base de donnée"
 #./wait-for db:5432
 
-echo "Execution des migrations"
-python manage.py migrate
+echo "Exécution des migrations"
+python manage.py migrate --noinput
 
-echo "Execution de collectstatic"
+echo "Collecte des fichiers statiques"
 python manage.py collectstatic --noinput
 
-echo "Demarrage du serveur"
-python manage.py runserver 0.0.0.0:8000
+echo "Démarrage du serveur Gunicorn"
+exec gunicorn projet.wsgi:application \
+    --bind 0.0.0.0:8000 \
+    --workers ${GUNICORN_WORKERS:-3} \
+    --timeout ${GUNICORN_TIMEOUT:-120} \
+    --access-logfile '-' \
+    --error-logfile '-'

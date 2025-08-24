@@ -1,5 +1,5 @@
 """
-URL configuration for projet project.
+URL configuration for config project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -24,7 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin/filebrowser/', site.urls),
     path('', include('core.urls.main')),
-    path('fleet/', include('fleet_app.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
