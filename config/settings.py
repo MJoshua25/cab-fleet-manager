@@ -238,12 +238,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100 MB en bytes
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ATOMIC_REQUESTS = True
 
-# Production security toggles
-if not DEBUG:
-	SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-	CSRF_COOKIE_SECURE = True
-	SESSION_COOKIE_SECURE = True
-	SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'true').lower() in ('1', 'true', 'yes')
+
 
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
