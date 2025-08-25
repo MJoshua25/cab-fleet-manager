@@ -38,8 +38,7 @@ bd_type = os.environ.get('bd', 'SQLITE').upper()
 DB = bd_type == 'POSTGRES'
 
 # Hosts and security settings
-DEFAULT_ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*.yedjap.ci', 'fleet']
-ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', ','.join(DEFAULT_ALLOWED_HOSTS)).split(',') if h.strip()]
+ALLOWED_HOSTS = ['*']
 
 # CORS/CSRF strict configuration
 CORS_ALLOW_ALL_ORIGINS = False
