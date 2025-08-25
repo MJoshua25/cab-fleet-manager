@@ -12,8 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sentry_sdk
 from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
+import django.db.models.signals
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()  # take environment variables from .env.
 
@@ -41,76 +44,107 @@ ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', ','.join(DEF
 # CORS/CSRF strict configuration
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://([a-zA-Z0-9-]+\.)*yedjap\.ci$",
-    r"^http://localhost(:\d+)?$",
-    r"^http://127\.0\.0\.1(:\d+)?$",
+	r"^https://([a-zA-Z0-9-]+\.)*yedjap\.ci$",
+	r"^http://localhost(:\d+)?$",
+	r"^http://127\.0\.0\.1(:\d+)?$",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.yedjap.ci',
-    'http://localhost',
-    'http://localhost:8081',
-    'http://127.0.0.1',
-    'http://127.0.0.1:8081',
+	'https://*.yedjap.ci',
+	'http://localhost',
+	'http://localhost:8081',
+	'http://127.0.0.1',
+	'http://127.0.0.1:8081',
 ]
 
 CSRF_TRUSTED_ORIGINS += [BASE_URL,]
 
+def before_send(event, hint):
+	"""
+	Remove sensitive data from Sentry events before sending.
+	"""
+	if "request" in event:
+		event["request"].pop("cookies", None)
+	return event
+
+if not DEBUG:
+	sentry_sdk.init(
+		dsn=os.environ.get("SENTRY_DNS", ''),
+		integrations=[
+			DjangoIntegration(
+				transaction_style='url',
+				middleware_spans=True,
+				signals_spans=True,
+				signals_denylist=[
+					django.db.models.signals.pre_init,
+					django.db.models.signals.post_init,
+				],
+				cache_spans=False,
+			),
+		],
+		traces_sample_rate=float(os.environ.get("SENTRY_TRACES_SAMPLE_RATE", 1.0)),
+		profiles_sample_rate=float(os.environ.get("SENTRY_PROFILES_SAMPLE_RATE", 1.0)),
+		environment=os.environ.get("SENTRY_ENVIRONMENT", "production"),
+		release=os.environ.get("SENTRY_RELEASE", "unknown"),
+		before_send=before_send,
+		send_default_pii=True,  # Set to True only if you need user context
+	)
+
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+	'whitenoise.runserver_nostatic',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
 
-    # My apps
-    'tenant',
-    'core',
-    'fleet_app',
-    'finance_app',
+	# My apps
+	'tenant',
+	'core',
+	'fleet_app',
+	'finance_app',
 
-    # Packages
-    'django_filters',
-    'corsheaders',
-    'django_admin_generator',
-    'filebrowser',
+	# Packages
+	'django_filters',
+	'corsheaders',
+	'django_admin_generator',
+	'filebrowser',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'corsheaders.middleware.CorsMiddleware',
+	'django.middleware.security.SecurityMiddleware',
+	'whitenoise.middleware.WhiteNoiseMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                # ADD
-                'django.template.context_processors.i18n',
-            ],
-        },
-    },
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [BASE_DIR / 'templates'],
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'context_processors': [
+				'django.template.context_processors.debug',
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				'django.contrib.messages.context_processors.messages',
+				# ADD
+				'django.template.context_processors.i18n',
+			],
+		},
+	},
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -119,48 +153,48 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 if DB:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'HOST': os.environ.get('POSTGRES_HOST'),
-            'NAME': os.environ.get('POSTGRES_DB'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        }
-    }
+	DATABASES = {
+		'default': {
+			'ENGINE': 'django.db.backends.postgresql',
+			'HOST': os.environ.get('POSTGRES_HOST'),
+			'NAME': os.environ.get('POSTGRES_DB'),
+			'USER': os.environ.get('POSTGRES_USER'),
+			'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+		}
+	}
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+	DATABASES = {
+		'default': {
+			'ENGINE': 'django.db.backends.sqlite3',
+			'NAME': BASE_DIR / 'db.sqlite3',
+		}
+	}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+	{
+		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+	},
 ]
 
 # MESSAGE
 MESSAGE_TAGS = {
-    messages.DEBUG: 'alert-info',
-    messages.INFO: 'alert-info',
-    messages.SUCCESS: 'SUCCESS',
-    messages.WARNING: 'ERREUR',
-    messages.ERROR: 'ERREUR',
+	messages.DEBUG: 'alert-info',
+	messages.INFO: 'alert-info',
+	messages.SUCCESS: 'SUCCESS',
+	messages.WARNING: 'ERREUR',
+	messages.ERROR: 'ERREUR',
 }
 
 # Internationalization
@@ -182,7 +216,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+	os.path.join(BASE_DIR, "static"),
 ]
 FILEBROWSER_DIRECTORY = 'media_cdn/'
 DIRECTORY = 'media_cdn/'
@@ -213,10 +247,10 @@ ATOMIC_REQUESTS = True
 
 # Production security toggles
 if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'true').lower() in ('1', 'true', 'yes')
+	SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+	CSRF_COOKIE_SECURE = True
+	SESSION_COOKIE_SECURE = True
+	SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'true').lower() in ('1', 'true', 'yes')
 
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
