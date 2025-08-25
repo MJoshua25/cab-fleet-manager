@@ -41,13 +41,6 @@ DB = bd_type == 'POSTGRES'
 ALLOWED_HOSTS = ['*']
 
 # CORS/CSRF strict configuration
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGIN_REGEXES = [
-	r"^https://([a-zA-Z0-9-]+\.)*yedjap\.ci$",
-	r"^http://localhost(:\d+)?$",
-	r"^http://127\.0\.0\.1(:\d+)?$",
-]
-
 CSRF_TRUSTED_ORIGINS = [
 	'https://*.yedjap.ci',
 	'http://localhost',
